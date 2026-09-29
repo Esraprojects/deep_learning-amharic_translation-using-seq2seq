@@ -1,0 +1,9 @@
+__pycache__/
+*.pyc
+.ipynb_checkpoints/
+logs/
+# large / regenerable data (re-create with: python src/preprocess.py)
+data/raw/
+data/processed/train.tsv
+data/processed/*.ids.pt
+data/processed/*.txt
