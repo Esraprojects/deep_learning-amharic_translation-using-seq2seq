@@ -1,0 +1,48 @@
+# Optional: deploys the FastAPI + Gradio server to a free Hugging Face Space.
+# One-time setup: create a write token at https://huggingface.co/settings/tokens and
+# add it as the repository secret HF_TOKEN (and optionally the variable HF_SPACE,
+# e.g. "your-hf-username/amharic-seq2seq"). Without the secret this job is skipped.
+name: Deploy to Hugging Face Space
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    env:
+      HF_TOKEN: ${{ secrets.HF_TOKEN }}
+    steps:
+      - uses: actions/checkout@v4
+        if: env.HF_TOKEN != ''
+      - name: Push to Space
+        if: env.HF_TOKEN != ''
+        env:
+          HF_SPACE: ${{ vars.HF_SPACE }}
+        run: |
+          pip install -q "huggingface_hub>=0.24"
+          python - <<'PY'
+          import os, shutil
+          from huggingface_hub import HfApi
+          api = HfApi(token=os.environ["HF_TOKEN"])
+          space = os.environ.get("HF_SPACE") or f"{api.whoami()['name']}/amharic-seq2seq-translator"
+          api.create_repo(space, repo_type="space", space_sdk="docker", exist_ok=True)
+          os.makedirs("space", exist_ok=True)
+          for p in ["app.py", "Dockerfile", "requirements.txt", ".dockerignore"]:
+              shutil.copy(p, "space/")
+          for d in ["src", "assets"]:
+              shutil.copytree(d, f"space/{d}")
+          os.makedirs("space/models")
+          for f in os.listdir("models"):
+              if f.endswith((".pt", ".model")):
+                  shutil.copy(f"models/{f}", "space/models/")
+          open("space/README.md", "w").write(
+              "---\ntitle: English to Amharic Seq2Seq\nemoji: 🌍\ncolorFrom: green\ncolorTo: blue\n"
+              "sdk: docker\napp_port: 7860\npinned: false\nlicense: mit\n---\n\n"
+              "Seq2Seq-LSTM and Attention-LSTM English→Amharic translator. "
+              "REST API: `POST /translate` with `{\"text\": \"...\"}`. Source: "
+              f"https://github.com/{os.environ['GITHUB_REPOSITORY']}\n")
+          api.upload_folder(folder_path="space", repo_id=space, repo_type="space",
+                            commit_message=f"Deploy {os.environ['GITHUB_SHA'][:7]}")
+          print(f"Deployed: https://huggingface.co/spaces/{space}")
+          PY

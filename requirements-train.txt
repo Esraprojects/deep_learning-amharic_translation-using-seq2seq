@@ -1,0 +1,7 @@
+# Everything needed to reproduce preprocessing, training, evaluation and export
+-r requirements.txt
+datasets>=2.18
+pyarrow>=15
+sacrebleu>=2.4
+onnx>=1.16
+onnxruntime>=1.18
