@@ -86,9 +86,10 @@ With Docker: `docker build -t amharic-mt . && docker run -p 7860:7860 amharic-mt
 ## Reproduce the full pipeline
 
 ```bash
+bash scripts/run_pipeline.sh              # everything below in one resumable command
 python src/preprocess.py                  # ≈3 min: data/processed/*, models/spm_{en,am}.model
-python src/train.py --model seq2seq   --emb 256 --hid 256 --layers 2 --batch_size 128 --epochs 5 --time_budget 170 --threads 2
-python src/train.py --model attention --emb 256 --hid 256 --layers 2 --batch_size 128 --epochs 5 --time_budget 170 --threads 2
+python src/train.py --model seq2seq   --emb 256 --hid 256 --layers 2 --batch_size 128 --epochs 5 --time_budget 150 --threads 2
+python src/train.py --model attention --emb 256 --hid 256 --layers 2 --batch_size 128 --epochs 5 --time_budget 150 --threads 2
 python src/evaluate.py                    # results/* and results/figures/*
 python src/export_onnx.py                 # web/models/* for the browser demo
 python tests/test_web_parity.py           # JS tokenizer == Python tokenizer

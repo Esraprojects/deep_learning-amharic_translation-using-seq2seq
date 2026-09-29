@@ -84,14 +84,35 @@ def main():
     crit = nn.CrossEntropyLoss(ignore_index=PAD, label_smoothing=args.label_smoothing)
 
     ckpt = os.path.join(args.out, f"{args.model}.pt")
+    last = os.path.join(args.out, f"{args.model}.last.pt")  # resumable training state
     history, best = [], float("inf")
-    t0 = time.time()
+    start_epoch, skip, run, n, elapsed = 1, 0, 0.0, 0, 0.0
+    if os.path.exists(last):
+        st = torch.load(last, weights_only=False)
+        model.load_state_dict(st["state_dict"])
+        opt.load_state_dict(st["optimizer"])
+        sched.load_state_dict(st["scheduler"])
+        torch.set_rng_state(st["rng"])
+        history, best, start_epoch, skip = st["history"], st["best"], st["epoch"], st["step"]
+        run, n, elapsed = st["run"], st["n"], st["elapsed"]
+        print(f"resumed from epoch {start_epoch} step {skip} ({elapsed / 60:.1f} min trained)", flush=True)
+
+    def save_state(epoch, step):
+        torch.save({"state_dict": model.state_dict(), "optimizer": opt.state_dict(),
+                    "scheduler": sched.state_dict(), "rng": torch.get_rng_state(), "history": history,
+                    "best": best, "epoch": epoch, "step": step, "run": run, "n": n,
+                    "elapsed": elapsed + time.time() - t_resume}, last + ".tmp")
+        os.replace(last + ".tmp", last)
+
+    t_resume = time.time()
     steps_per_epoch = math.ceil(len(train) / args.batch_size)
     stop = False
-    for epoch in range(1, args.epochs + 1):
+    for epoch in range(start_epoch, args.epochs + 1):
         model.train()
-        ep_t, run, n = time.time(), 0.0, 0
+        ep_t = time.time()
         for step, (src, src_len, tgt_in, tgt_out) in enumerate(batches(train, args.batch_size, seed=epoch), 1):
+            if step <= skip:
+                continue
             logits = model(src, src_len, tgt_in)
             loss = crit(logits.reshape(-1, logits.size(-1)), tgt_out.reshape(-1))
             opt.zero_grad()
@@ -103,17 +124,19 @@ def main():
             if step % 500 == 0:
                 el = time.time() - ep_t
                 print(f"  epoch {epoch} step {step}/{steps_per_epoch} loss {run / n:.3f} "
-                      f"({el / step:.3f}s/step)", flush=True)
-            if args.time_budget and (time.time() - t0) / 60 > args.time_budget:
+                      f"({el / (step - skip):.3f}s/step)", flush=True)
+            if step % 250 == 0:
+                save_state(epoch, step)
+            if args.time_budget and (elapsed + time.time() - t_resume) / 60 > args.time_budget:
                 stop = True
                 break
+        skip = 0
         val_loss = evaluate_loss(model, valid)
         bleu, samples = quick_bleu(model, tok, valid, valid_refs)
         sched.step(val_loss)
         rec = dict(epoch=epoch, train_loss=round(run / max(n, 1), 4), val_loss=round(val_loss, 4),
                    val_ppl=round(math.exp(val_loss), 2), val_bleu_500=round(bleu, 2),
-                   lr=opt.param_groups[0]["lr"], epoch_minutes=round((time.time() - ep_t) / 60, 2),
-                   steps=n, partial_epoch=stop)
+                   lr=opt.param_groups[0]["lr"], steps=n, partial_epoch=stop)
         history.append(rec)
         print(json.dumps(rec), flush=True)
         for s in samples:
@@ -122,10 +145,12 @@ def main():
             best = val_loss
             torch.save({"kind": args.model, "config": model.config, "state_dict": model.state_dict(),
                         "epoch": epoch, "val_loss": val_loss}, ckpt)
+        run, n = 0.0, 0
+        save_state(epoch + 1, 0)
         if stop:
             break
 
-    train_time = time.time() - t0
+    train_time = elapsed + time.time() - t_resume
     info = dict(model=args.model, parameters=n_params, training_pairs=len(train),
                 training_time_sec=round(train_time, 1), best_val_loss=round(best, 4),
                 hyperparameters=vars(args) | {"optimizer": "Adam", "loss": "CrossEntropy (label smoothing)",

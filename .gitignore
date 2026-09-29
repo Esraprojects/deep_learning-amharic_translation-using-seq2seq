@@ -7,3 +7,4 @@ data/raw/
 data/processed/train.tsv
 data/processed/*.ids.pt
 data/processed/*.txt
+models/*.last.pt
