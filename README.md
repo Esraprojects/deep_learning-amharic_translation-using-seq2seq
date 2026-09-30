@@ -13,7 +13,29 @@ with a **basic Seq2Seq + LSTM** baseline and an **attention-based Seq2Seq + LSTM
 | Deployment | FastAPI `POST /translate` + Gradio UI (`app.py`, Docker) · static web demo (ONNX Runtime Web, GitHub Pages) |
 | Report | [`report/TECHNICAL_REPORT.md`](report/TECHNICAL_REPORT.md) · slides: [`report/presentation.pptx`](report/presentation.pptx) |
 
-<!-- RESULTS -->
+## Results (test set, 5,000 sentences)
+
+| Metric | Seq2Seq + LSTM | **Attention Seq2Seq + LSTM** |
+|---|---:|---:|
+| BLEU ↑ | 2.97 | **8.57** |
+| chrF ↑ | 12.16 | **19.46** |
+| Test loss (CE) ↓ | 3.974 | **3.548** |
+| Parameters | 7,995,200 | 8,191,808 |
+| Training time (4-core CPU) | 150 min | 150 min |
+| Inference per sentence (single / batched) | 19.5 / 1.9 ms | 22.1 / 3.4 ms |
+
+**The attention model wins on every metric and in every sentence-length bucket.** Details:
+[comparison & error analysis](results/comparison.md) · [translation examples](results/examples.md) ·
+[error examples](results/error_analysis.md) · [full technical report](report/TECHNICAL_REPORT.md).
+
+| Attention: "Jesus taught his disciples to love one another." | BLEU by sentence length |
+|---|---|
+| ![attention](results/figures/attention_2.png) | ![length](results/figures/bleu_by_length.png) |
+
+> The corpus is mostly religious text, so sentences from that domain translate best
+> ("We must read the Bible every day." → "መጽሀፍ ቅዱስን በየእለቱ ማንበብ ይኖርብናል።"), and
+> everyday sentences outside it are often translated poorly.
+
 
 ## Group members
 
