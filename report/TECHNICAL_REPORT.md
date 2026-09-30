@@ -1,7 +1,9 @@
 # English → Amharic Neural Machine Translation: Seq2Seq-LSTM vs Attention-LSTM
 
 **Deep Learning Course Project — Technical Report**
-Instructor: Fantahun Bogale Gereme · Group members: _see README_
+Instructor: Fantahun Bogale Gereme
+
+**Group members:** Bethel Negusu (GSR/8221/18) · Esrom Adugna (GSR/4064/18) · Selamawit Siferh (GSR/6879/18) · Aklilu Solomon (GSE/0756/18)
 
 ---
 
