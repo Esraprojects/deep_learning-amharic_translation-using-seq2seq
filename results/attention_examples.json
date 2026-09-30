@@ -1,0 +1,285 @@
+[
+  {
+    "source": "I am going to the university.",
+    "translation": "እኔ ደግሞ በስሜት ቆየሁ።",
+    "seq2seq": "እኔ ግን እኔ ነኝ።",
+    "source_tokens": [
+      "▁i",
+      "▁am",
+      "▁going",
+      "▁to",
+      "▁the",
+      "▁university",
+      "▁."
+    ],
+    "target_tokens": [
+      "▁እኔ",
+      "▁ደግሞ",
+      "▁በ",
+      "ስ",
+      "ሜ",
+      "ት",
+      "▁",
+      "ቆየ",
+      "ሁ",
+      "▁።",
+      "</s>"
+    ]
+  },
+  {
+    "source": "Jesus taught his disciples to love one another.",
+    "translation": "ኢየሱስ ደቀ መዛሙርቱ እርስ በርሳቸው እንዲወዱ አስተምሯቸዋል።",
+    "seq2seq": "ኢየሱስ ደቀ መዛሙርቱን ፍቅር አሳይቷል።",
+    "source_tokens": [
+      "▁jesus",
+      "▁taught",
+      "▁his",
+      "▁disciples",
+      "▁to",
+      "▁love",
+      "▁one",
+      "▁another",
+      "▁."
+    ],
+    "target_tokens": [
+      "▁ኢየሱስ",
+      "▁ደቀ",
+      "▁መዛሙርቱ",
+      "▁እርስ",
+      "▁በርሳቸው",
+      "▁እንዲ",
+      "ወ",
+      "ዱ",
+      "▁አስተምሯቸዋል",
+      "▁።",
+      "</s>"
+    ]
+  },
+  {
+    "source": "The children are playing in the garden.",
+    "translation": "ልጆቹ በ ገነት ውስጥ ናቸው።",
+    "seq2seq": "ልጆችም በወንዶች ላይ ናቸው።",
+    "source_tokens": [
+      "▁the",
+      "▁children",
+      "▁are",
+      "▁playing",
+      "▁in",
+      "▁the",
+      "▁garden",
+      "▁."
+    ],
+    "target_tokens": [
+      "▁ልጆቹ",
+      "▁በ",
+      "▁ገነት",
+      "▁ውስጥ",
+      "▁ናቸው",
+      "▁።",
+      "</s>"
+    ]
+  },
+  {
+    "source": "God created the heavens and the earth.",
+    "translation": "ሰማያትንና ምድርንን ፈጠረ።",
+    "seq2seq": "የሰማያትና የምድር ንግስናና በምድርም ላይ ነው።",
+    "source_tokens": [
+      "▁god",
+      "▁created",
+      "▁the",
+      "▁heavens",
+      "▁and",
+      "▁the",
+      "▁earth",
+      "▁."
+    ],
+    "target_tokens": [
+      "▁ሰማያት",
+      "ንና",
+      "▁ምድርን",
+      "ን",
+      "▁ፈጠረ",
+      "▁።",
+      "</s>"
+    ]
+  },
+  {
+    "source": "We must read the Bible every day.",
+    "translation": "መጽሀፍ ቅዱስን በየእለቱ ማንበብ ይኖርብናል።",
+    "seq2seq": "መጽሀፍ ቅዱስን ማጥናት ይኖርብናል።",
+    "source_tokens": [
+      "▁we",
+      "▁must",
+      "▁read",
+      "▁the",
+      "▁bible",
+      "▁every",
+      "▁day",
+      "▁."
+    ],
+    "target_tokens": [
+      "▁መጽሀፍ",
+      "▁ቅዱስን",
+      "▁በየእለቱ",
+      "▁ማንበብ",
+      "▁ይኖርብናል",
+      "▁።",
+      "</s>"
+    ]
+  },
+  {
+    "source": "My mother is cooking dinner for the family.",
+    "translation": "እናቴ ቤተሰብን ለመንከባከብ ፈቃደኛ ነው።",
+    "seq2seq": "እናቴን ቤተሰቦቼን ወስደዋል።",
+    "source_tokens": [
+      "▁my",
+      "▁mother",
+      "▁is",
+      "▁cook",
+      "ing",
+      "▁dinner",
+      "▁for",
+      "▁the",
+      "▁family",
+      "▁."
+    ],
+    "target_tokens": [
+      "▁እናቴ",
+      "▁ቤተሰብ",
+      "ን",
+      "▁ለመ",
+      "ንከባከብ",
+      "▁ፈቃደኛ",
+      "▁ነው",
+      "▁።",
+      "</s>"
+    ]
+  },
+  {
+    "source": "that one is none other than jehovah god .",
+    "translation": "ይህ ሰው ከይሆዋ አምላክ ሌላ ሌላ አይደለም።",
+    "seq2seq": "ይሆዋ አምላክ ነው።",
+    "source_tokens": [
+      "▁that",
+      "▁one",
+      "▁is",
+      "▁none",
+      "▁other",
+      "▁than",
+      "▁jehovah",
+      "▁god",
+      "▁."
+    ],
+    "target_tokens": [
+      "▁ይህ",
+      "▁ሰው",
+      "▁ከይሆዋ",
+      "▁አምላክ",
+      "▁ሌላ",
+      "▁ሌላ",
+      "▁አይደለም",
+      "▁።",
+      "</s>"
+    ]
+  },
+  {
+    "source": "for example , why doesn ' t god stop people from doing evil things in the first place ?",
+    "translation": "ለምሳሌ ያህል፣ አምላክ፣ ሰዎች መጀመሪያ ላይ ክፉ ነገር ከመፈጸም ይልቅ ሰዎችን ከመቀበል ይልቅ ሰዎችን የሚቃወሙት ለምንድን ነው?",
+    "seq2seq": "ለምሳሌ ያህል፣ አምላክ ክፉዎችን የሚቃወሙት ለምንድን ነው?",
+    "source_tokens": [
+      "▁for",
+      "▁example",
+      "▁,",
+      "▁why",
+      "▁doesn",
+      "▁'",
+      "▁t",
+      "▁god",
+      "▁stop",
+      "▁people",
+      "▁from",
+      "▁doing",
+      "▁evil",
+      "▁things",
+      "▁in",
+      "▁the",
+      "▁first",
+      "▁place",
+      "▁?"
+    ],
+    "target_tokens": [
+      "▁ለምሳሌ",
+      "▁ያህል",
+      "▁፣",
+      "▁አምላክ",
+      "▁፣",
+      "▁ሰዎች",
+      "▁መጀመሪያ",
+      "▁ላይ",
+      "▁ክፉ",
+      "▁ነገር",
+      "▁ከመ",
+      "ፈጸም",
+      "▁ይልቅ",
+      "▁ሰዎች",
+      "ን",
+      "▁ከመ",
+      "ቀበል",
+      "▁ይልቅ",
+      "▁ሰዎች",
+      "ን",
+      "▁የሚ",
+      "ቃወሙ",
+      "ት",
+      "▁ለምንድን",
+      "▁ነው",
+      "▁?",
+      "</s>"
+    ]
+  },
+  {
+    "source": "he was a dominican monk , a fiery preacher , and a political leader of florence .",
+    "translation": "አንድ የፖለቲካ መሪ፣ የክፍልና የፖለቲካ መሪ የነበረው መሪ ነበር።",
+    "seq2seq": "አንድ ሰው፣ የስንትና የስድስትና የስድስት መንፈስ ነው።",
+    "source_tokens": [
+      "▁he",
+      "▁was",
+      "▁a",
+      "▁dominican",
+      "▁monk",
+      "▁,",
+      "▁a",
+      "▁fiery",
+      "▁preacher",
+      "▁,",
+      "▁and",
+      "▁a",
+      "▁political",
+      "▁leader",
+      "▁of",
+      "▁f",
+      "lo",
+      "re",
+      "nce",
+      "▁."
+    ],
+    "target_tokens": [
+      "▁አንድ",
+      "▁የፖለቲካ",
+      "▁መሪ",
+      "▁፣",
+      "▁የ",
+      "ክ",
+      "ፍ",
+      "ል",
+      "ና",
+      "▁የፖለቲካ",
+      "▁መሪ",
+      "▁የነበረው",
+      "▁መሪ",
+      "▁ነበር",
+      "▁።",
+      "</s>"
+    ]
+  }
+]

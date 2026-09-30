@@ -1,0 +1,76 @@
+{
+  "raw": {
+    "name": "raw",
+    "pairs": 669145,
+    "en_tokens_mean": 21.41,
+    "en_tokens_median": 19.0,
+    "en_tokens_max": 120,
+    "am_tokens_mean": 14.59,
+    "am_tokens_median": 13.0,
+    "am_tokens_max": 118,
+    "en_word_types": 91739,
+    "am_word_types": 361906
+  },
+  "train": {
+    "name": "train",
+    "pairs": 427665,
+    "en_tokens_mean": 15.51,
+    "en_tokens_median": 16.0,
+    "en_tokens_max": 25,
+    "am_tokens_mean": 11.11,
+    "am_tokens_median": 11.0,
+    "am_tokens_max": 25,
+    "en_word_types": 51458,
+    "am_word_types": 242578
+  },
+  "valid": {
+    "name": "valid",
+    "pairs": 3000,
+    "en_tokens_mean": 15.5,
+    "en_tokens_median": 16.0,
+    "en_tokens_max": 25,
+    "am_tokens_mean": 11.1,
+    "am_tokens_median": 11.0,
+    "am_tokens_max": 25,
+    "en_word_types": 6297,
+    "am_word_types": 11629
+  },
+  "test": {
+    "name": "test",
+    "pairs": 5000,
+    "en_tokens_mean": 15.62,
+    "en_tokens_median": 16.0,
+    "en_tokens_max": 25,
+    "am_tokens_mean": 11.22,
+    "am_tokens_median": 11.0,
+    "am_tokens_max": 25,
+    "en_word_types": 8368,
+    "am_word_types": 16737
+  },
+  "cleaning_log": [
+    {
+      "step": "raw pairs",
+      "pairs": 669145
+    },
+    {
+      "step": "after dropping missing/empty",
+      "pairs": 669145
+    },
+    {
+      "step": "after dropping exact duplicate pairs",
+      "pairs": 669094
+    },
+    {
+      "step": "after script filter (EN has no Ge'ez, AM >= 90% Ge'ez letters)",
+      "pairs": 663293
+    },
+    {
+      "step": "after length filter (2-25 tokens, AM/EN ratio 0.3-1.6)",
+      "pairs": 442746
+    },
+    {
+      "step": "after de-duplicating normalized pairs and repeated English sources",
+      "pairs": 435665
+    }
+  ]
+}

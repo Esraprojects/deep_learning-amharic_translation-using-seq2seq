@@ -1,0 +1,29 @@
+# Translation examples (test set)
+
+| # | Source (EN) | Reference (AM) | Seq2Seq + LSTM | Attention-LSTM |
+|---|---|---|---|---|
+| 1 | paul and other first - century christians learned this kind of love from the teachings of jesus . | (ለ) ኢየሱስ ያንጸባረቀውን አይነት ፍቅርና ትህትና ማሳየት ምን ያህል አስፈላጊ ነው? | ጳውሎስና ጳውሎስ ክርስቲያኖችን በተመለከተ ኢየሱስ ክርስቶስ በፊልጵስዩስ ክርስቲያኖች ላይ እምነት ነበራቸው። | ጳውሎስና ሌሎች በመጀመሪያው መቶ ዘመን ክርስቲያኖች ከኢየሱስ ትምህርቶች ጋር ፍቅር እንዳላቸው አሳይተዋል። |
+| 2 | lies damage both the one telling them and the one believing them . | ውሸት፣ ለተናጋሪውም ሆነ የተነገረውን ለሚያምነው ሰው ጎጂ ነው። | እነዚያ እነርሱ ከርሱ ጋር የሚከራከሩት እነዚያ እነርሱ በእርግጥ ይከራከሩ ነበር። | አንድ ሰው ምስጢኑን የሚከለከላቸው ከመሆኑም በላይ አንድ ሰውና ውርስን ይገድላቸዋል። |
+| 3 | for example , why doesn ' t god stop people from doing evil things in the first place ? | ለምሳሌ ያህል፣ ' ሰዎች መጥፎ ነገር እንዳይሰሩ አምላክ መጀመሪያውኑ ለምን አላስቆማቸውም? | ለምሳሌ ያህል፣ አምላክ ክፉዎችን የሚቃወሙት ለምንድን ነው? | ለምሳሌ ያህል፣ አምላክ፣ ሰዎች መጀመሪያ ላይ ክፉ ነገር ከመፈጸም ይልቅ ሰዎችን ከመቀበል ይልቅ ሰዎችን የሚቃወሙት ለምንድን ነው? |
+| 4 | the application of such scriptural principles reinforces the tie that binds husbands and wives . | እነዚህን የመሰሉ ቅዱስ ጽሁፋዊ መሰረታዊ ስርአቶችን ተግባራዊ ማድረጉ ባልና ሚስቶች የተጣመሩበትን ሰንሰለት ያጠናክረዋል። | እነዚህ የመጽሀፍ ቅዱስ መሰረታዊ ስርአቶችን ጨምሮ የእነሱን ምክርና ማበረታቻ ማግኘት ይችላሉ። | እንዲህ አይነቱ የመጽሀፍ ቅዱስ መሰረታዊ ስርአቶችን በተመለከተ ባሎችና ሚስቶችን የሚያንጸባርቁት እንዴት ነው? |
+| 5 | indeed , " his loving - kindness is to time indefinite . " - psalm 100 : 5 . | በእርግጥም " ምህረቱ [" ፍቅራዊ ደግነቱ፣ " NW] ለዘላለም " ነው። - መዝሙር 100: 5 | በእርግጥም " ይሆዋ " ታላቅ ሰው ነው። " - 1 ቆሮንቶስ 00: 10 | በእርግጥም " ፍቅራዊ ደግነትን ለዘላለም ነው። " - መዝሙር 100: 5 |
+| 6 | he was deeply hurt when his worshippers in ancient israel turned away from him . | አምላክ በጥንቷ እስራኤል የነበሩት አምላኪዎቹ ጀርባቸውን በሰጡት ጊዜ በጣም አዝኖ ነበር። | እስራኤላውያን ከግብጽ ወደ አምላክ እንዲመለሱ ያደረገውን ነገር አድርጓል። | በጥንቷ እስራኤል ውስጥ እስራኤላውያንን ከወንዶች ነጻ ሲወጡ በጣም ተቆጣ። |
+| 7 | peru has put great effort into reducing its maternal mortality rate . | በፔሩ የእናቶችን ሞት ለመቀነስ ከፍተኛ ጥረት እየተደረገ ነው። | ምስጢን በጭንት ላይ የሚሰነዘርበት ጊዜ ምስጢን ውሸት። | ሪፖርቱ ሪፖርት ሪፖርት ፕሬድ ሪፖርት ፕሬድ ሪፖርት ፕሬድ ሪፖርት ፕሬድ ሪፖርት ፕሬድ ሪፖርት ፕሬድ ሪፖርት 1500 1000 1000 |
+| 8 | what will make you understand what the reality is ? | አረጋጋጪቱም ምን እንደኾነች ምን አሳወቀህ? | ታዲያ ምን አይነት ነገር አለ? | ምን አይነት ሁኔታ እንዳለህ ምን ማድረግ ትችላለህ? |
+| 9 | ( b ) why is jesus an incomparable treasure in his role as " the lamb of god " ? | (ለ) ኢየሱስ " የአምላክ በግ " በመሆን በሚጫወተው ሚና፣ ወደር የማይገኝለት ውድ ሀብት ነው የምንለው ለምንድን ነው? | (ለ) ኢየሱስ " የአምላክ መንግስት " የሆነው ለምንድን ነው? | (ለ) ኢየሱስ " የእግዚአብሄር " ሚና " የአምላክ እጅ " መሆኑን የሚያሳየው ለምንድን ነው? |
+| 10 | we are awed by the knowledge that jehovah , the greatest person in the universe , manifests the appealing quality of humility . | ይሆዋ በአጽናፈ አለም ውስጥ ከሁሉ የላቀው አካል ቢሆንም እንኳ ግሩም የሆነውን የትህትና ባህርይ ያንጸባርቃል፤ ይህን ማወቃችን በአድናቆት እንድንዋጥ ያደርገናል። | ይሆዋ፣ የሰው ልጆች፣ የሰው ልጆችን የሚገዛው እንዴት ነው? | ይሆዋ፣ ይሆዋ፣ ይሆዋ ትህትናን፣ ትህትናን የሚያንጸባርቅበት መንገድ ነው። |
+| 11 | songs : 100 , 87 | መዝሙሮች፦ 100, 87 | መዝሙሮች፦ 10, 70 | መዝሙሮች፦ 100, 87 |
+| 12 | one of the nuns showed real interest in our message and said : " these are beautiful things . | ከመነኩሲቶቹ አንዷ ለምንነግራት ነገር ልባዊ ፍላጎት እያደረባት በመሄዱ " በጣም ደስ የሚል ትምህርት ነው። | አንድ ሰው " ስለ እኛ ["] " የሚለው ቃል በጣም አስፈላጊ ነው። | አንድ ሰው " እነዚህ ናቸው፤ እነዚህ ናቸው። |
+| 13 | six years later , my father died . | ከስድስት አመት በኋላ አባቴ ሞተ። | አባቴ አባቴን ወለድኩ። | ከሁለት አመት በኋላ አባቴ ሞተ። |
+| 14 | one young christian states : " as far back as i can remember , my father has been preoccupied with his job . | አንዲት ክርስቲያን ወጣት እንዲህ ብላለች፦ " እኔ እስከማስታውሰው ድረስ አባቴ በስራ በጣም የተወጠረ ሰው ነበር። | አንድ ክርስቲያን " አንድ ወጣት እንዲህ ብላለች፦ " ቤተሰቦቼን ውደድ። | አንድ ወጣት እንዲህ ይላል: - " አባቴ እንደ ኢዮብን እንደ ኢዮብ ከኢዮብ ጋር በተያያዘ አባቴን እንዳስታውስ ተገንዝቤያለሁ። |
+| 15 | thus , this global war is associated with christ ' s presence , which bible prophecies show is now here . | ነቅቶ የሚኖር ሰው ደስተኛ ነው ' በማለት አስጠንቅቋል። | በመሆኑም ይህ አለም አቀፍ አለም አቀፍ አለም አቀፍ አለም ውስጥ ያለው መጽሀፍ ቅዱስ ነው። | በመሆኑም ይህ አለም በአሁኑ ጊዜ በክርስቶስ ዘመን የመጽሀፍ ቅዱስ ትንቢቶች ላይ ይገኛል። |
+| 16 | klaus and i had a wonderful marriage and had two children together , benjamin and tabia . | ከጊዜ በኋላ ክላውስ ሜነ የሚባል አንድ የይሆዋ ምስክር አገባሁ። | ዊልያምና ቤተሰቦቼና ቤተሰቦቼና ቤተሰቦቼን ጨምሮ ቤተሰቦቼን ወስደዋል። | ኒኮና ሪፖርትና ሁለት ልጆች ሁለት ልጆች ነበሩ። |
+| 17 | travelers have to spend hours , sometimes even days , waiting . | መንገደኞች ለብዙ ሰአታት፣ አልፎ አልፎም ለብዙ ቀናት ለመቆየት ይገደዳሉ። | ምስጢን፣ ምስጢርን፣ ሌሎች ደግሞ ምስጢን ውሸት። | አንዳንድ ጊዜ ምስጢራዊ ሰአት፣ ጊዜው፣ ጊዜው፣ ጊዜው፣ ጊዜው፣ ጊዜው የሚከለከሉበት ጊዜ አለ። |
+| 18 | what are some factors that promote this unity ? | ለዚህ አንድነት አስተዋጽኦ ያደረጉት አንዳንድ ነገሮች ምንድን ናቸው? | ይህ ሲባል ምን ማለት ነው? | ይህን አንድነት ለማጠናከር አንዳንድ ምክንያቶች ምንድን ናቸው? |
+| 19 | pursuing such a course makes us different from most of the people around us . | እንዲህ አይነት አካሄድ መከተላችን በዙሪያችን ካሉት አብዛኞቹ ሰዎች የተለየን እንድንሆን ያደርገናል። | እንዲህ ያለው አመለካከት በጣም አስፈላጊ የሆነው ለምንድን ነው? | እንዲህ አይነቱን ሁኔታ ከህዝቡ መካከል የተለየ እርምጃ መውሰድ እንችላለን። |
+| 20 | tychicus - a trusted fellow slave | ቲኪቆስ የታመነው አገልጋይ | ታማኙ ባሪያ - ምስጢራዊነት | ሪፖርት - የእምነት ባልንጀለኛ ባሪያ |
+| 21 | therefore , they asked him : " lord , teach us how to pray . " | በዚህም የተነሳ " መጸለይን አስተምረን " ብለው ጠይቀውት ነበር። | ስለዚህ " እግዚአብሄር ሆይ፣ [" ይሆዋ " NW] " የሚለውን ቃል ጸልዩ። | ስለዚህ " ጌታ ሆይ፣ መጸለይ እንዴት እንደሚጸልዩ አስተምረን " ብለው ይመለሱ ነበር። |
+| 22 | lack of humility has caused much confusion and strife between groups of people and between individuals . | ሰዎች ትሁት አለመሆናቸው በተለያዩ ቡድኖችም ሆነ በግለሰቦች መካከል ረብሻና ግጭት እንዲፈጠር አድርጓል። | የእነሱን ፍቅርና ፍቅርን ጨምሮ ሰዎችም እንኳ ሳይቀር የእነሱን ፍቅር አሳይቷል። | ትህትናና ሰዎች በአብዛኞቹ ሰዎች መካከል ከፍተኛ ተጽእኖ አሳድሯል። |
+| 23 | but in order for your children to find happiness , you also need to teach them to love god and to learn from him . | ሆኖም ልጆቻችሁ ደስተኞች እንዲሆኑ አምላክን እንዲወዱና እሱ የሚላቸውን ነገር እንዲሰሙ ማስተማርም ያስፈልጋችኋል። | ይሁን እንጂ ልጆቻችሁን ለአምላክና ፍቅርን በማዳመጥ ረገድ ጥሩ ምሳሌ ማግኘት ትችላለህ። | ይሁን እንጂ ልጆቻችሁ ደስታ ለማግኘትና ከእሱ መማር እንዲችሉ አምላክን እንዲያውቁ ለመርዳት ጥረት ማድረግ ይኖርብሀል። |
+| 24 | and more important , what does the bible show ? | ሆኖም ማስረጃዎቹ ምን ያሳያሉ? | መጽሀፍ ቅዱስ ስለ መጽሀፍ ቅዱስ ምን ይላል? | ከሁሉ ይበልጥ አስፈላጊ የሆነው መጽሀፍ ቅዱስ ምን ይላል? |
+| 25 | angels , 9 / 1 anyone see future ? | " ሰውን ጠቢብ አእምሮው ከቍጣ ያዘገየዋል፣ " 12 / 1 | መላእክት፣ 9 / 15 | መላእክት፣ 9 / 1 |

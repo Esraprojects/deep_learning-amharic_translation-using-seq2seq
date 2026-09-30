@@ -1,0 +1,7 @@
+data/
+logs/
+web/
+results/
+report/
+.git/
+**/__pycache__/
