@@ -41,8 +41,14 @@ function num(n) { return n.toLocaleString("en-US"); }
   s.addText("English → Amharic", { x: 0.8, y: 1.6, w: 11.5, h: 1.0, fontFace: H, fontSize: 54, bold: true, color: C.white, margin: 0, isTextBox: true });
   s.addText("Neural Machine Translation with Seq2Seq-LSTM and Attention", { x: 0.8, y: 2.6, w: 11.5, h: 0.7, fontFace: H, fontSize: 28, color: C.mint, margin: 0, isTextBox: true });
   s.addText("ወደ ዩኒቨርሲቲ እሄዳለሁ።", { x: 0.8, y: 3.5, w: 11.5, h: 0.7, fontFace: AM, fontSize: 30, color: C.gold, margin: 0, isTextBox: true });
-  s.addText("Deep Learning Course Project  ·  Instructor: Fantahun Bogale Gereme  ·  Group: [member names]", { x: 0.8, y: 5.6, w: 11.5, h: 0.4, fontFace: B, fontSize: 16, color: C.white, margin: 0, isTextBox: true });
-  s.addText("Live demo: esraprojects.github.io/deep_learning-amharic_translation-using-seq2seq", { x: 0.8, y: 6.05, w: 11.5, h: 0.4, fontFace: B, fontSize: 14, color: C.gray, margin: 0, isTextBox: true });
+  s.addText("Deep Learning Course Project  ·  Instructor: Fantahun Bogale Gereme", { x: 0.8, y: 4.45, w: 11.5, h: 0.4, fontFace: B, fontSize: 16, color: C.white, margin: 0, isTextBox: true });
+  const members = [["Bethel Negusu", "GSR/8221/18"], ["Esrom Adugna", "GSR/4064/18"], ["Selamawit Siferh", "GSR/6879/18"], ["Aklilu Solomon", "GSE/0756/18"]];
+  members.forEach(([n, id], i) => {
+    const x = 0.8 + (i % 2) * 5.0, y = 4.95 + Math.floor(i / 2) * 0.45;
+    s.addText([{ text: n, options: { bold: true, color: C.white } }, { text: "   " + id, options: { color: C.mint } }],
+      { x, y, w: 4.8, h: 0.4, fontFace: B, fontSize: 15, margin: 0, isTextBox: true });
+  });
+  s.addText("Live demo: esraprojects.github.io/deep_learning-amharic_translation-using-seq2seq", { x: 0.8, y: 6.3, w: 11.5, h: 0.4, fontFace: B, fontSize: 14, color: C.gray, margin: 0, isTextBox: true });
   s.addNotes("Introduce the team and the goal: build, compare and deploy two LSTM translation models for English to Amharic.");
 }
 

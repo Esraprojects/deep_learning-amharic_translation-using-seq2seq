@@ -44,10 +44,10 @@ and chrF from 19.46 to 22.84, and cut repeated-word outputs from 24 % to 8 %.
 
 | Name | ID |
 |---|---|
-| _Member 1_ | |
-| _Member 2_ | |
-| _Member 3_ | |
-| _Member 4_ | |
+| 1. Bethel Negusu | GSR/8221/18 |
+| 2. Esrom Adugna | GSR/4064/18 |
+| 3. Selamawit Siferh | GSR/6879/18 |
+| 4. Aklilu Solomon | GSE/0756/18 |
 
 ## Repository layout
 
