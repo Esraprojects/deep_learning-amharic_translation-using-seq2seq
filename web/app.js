@@ -10,17 +10,62 @@ const BOS = 2, EOS = 3;
 const $ = (id) => document.getElementById(id);
 let vocab, spEn, spAm;
 const sessions = {};
+const progress = {}; // url -> [loaded, total]
 
-async function loadSessions(kind) {
+function showProgress(label) {
+  let done = 0, total = 0;
+  for (const [l, t, lab] of Object.values(progress)) if (lab === label) { done += l; total += t; }
+  if (!total) return;
+  const pct = Math.floor((100 * done) / total);
+  if (label.includes("baseline")) {  // background download: shown in the baseline's box
+    $("ms-seq2seq").textContent = pct < 100 ? `baseline model loading… ${pct}%` : "";
+  } else {
+    $("status").textContent = `${label} ${pct}% (${(done / 2 ** 20).toFixed(1)} of ${(total / 2 ** 20).toFixed(1)} MB, first visit only)…`;
+  }
+}
+
+// Download a model file with progress reporting; retried once on network errors.
+async function fetchBytes(url, label, attempt = 1) {
+  try {
+    const res = await fetch(url);
+    if (!res.ok) throw new Error(`${url}: HTTP ${res.status}`);
+    const total = Number(res.headers.get("content-length")) || 0;
+    if (!res.body || !total) return new Uint8Array(await res.arrayBuffer());
+    const reader = res.body.getReader();
+    const buf = new Uint8Array(total);
+    let off = 0;
+    progress[url] = [0, total, label];
+    for (;;) {
+      const { done, value } = await reader.read();
+      if (done) break;
+      buf.set(value, off);
+      off += value.length;
+      progress[url] = [off, total, label];
+      showProgress(label);
+    }
+    return off === total ? buf : buf.slice(0, off);
+  } catch (e) {
+    if (attempt < 2) return fetchBytes(url, label, attempt + 1);
+    throw e;
+  }
+}
+
+async function loadSessions(kind, label = "Downloading models") {
   if (!sessions[kind]) {
     sessions[kind] = (async () => {
       const opts = { executionProviders: ["wasm"], graphOptimizationLevel: "all" };
+      const [encBytes, decBytes] = await Promise.all([
+        fetchBytes(`models/${kind}_encoder.onnx`, label),
+        fetchBytes(`models/${kind}_decoder.onnx`, label),
+      ]);
+      if (kind === "attention") $("status").textContent = "Starting the translation engine…";
       const [enc, dec] = await Promise.all([
-        ort.InferenceSession.create(`models/${kind}_encoder.onnx`, opts),
-        ort.InferenceSession.create(`models/${kind}_decoder.onnx`, opts),
+        ort.InferenceSession.create(encBytes, opts),
+        ort.InferenceSession.create(decBytes, opts),
       ]);
       return { enc, dec };
     })();
+    sessions[kind].catch(() => { delete sessions[kind]; }); // allow a retry after a failure
   }
   return sessions[kind];
 }
@@ -97,10 +142,17 @@ async function run() {
     $("src-tokens").textContent = att.srcTokens.join("  ");
     renderHeatmap(att);
     $("attn-wrap").hidden = false;
-    const base = await translate("seq2seq", text);
-    $("out-seq2seq").textContent = base.translation || "—";
-    $("ms-seq2seq").textContent = `${base.ms} ms`;
     $("status").textContent = "Ran entirely in your browser (beam search, ONNX Runtime Web).";
+    $("out-seq2seq").textContent = "…";
+    try {
+      const base = await translate("seq2seq", text);
+      $("out-seq2seq").textContent = base.translation || "—";
+      $("ms-seq2seq").textContent = `${base.ms} ms`;
+    } catch (err) {
+      console.error(err);
+      $("out-seq2seq").textContent = "—";
+      $("ms-seq2seq").textContent = "baseline model could not be loaded: " + err.message;
+    }
   } catch (err) {
     console.error(err);
     $("status").textContent = "Error: " + err.message;
@@ -110,13 +162,20 @@ async function run() {
 }
 
 async function init() {
-  $("status").textContent = "Loading models (~25 MB, first visit only)…";
-  vocab = await (await fetch("models/vocab.json")).json();
+  if (typeof WebAssembly !== "object") {
+    throw new Error("this browser does not support WebAssembly; please use a recent Chrome, Edge, Firefox or Safari");
+  }
+  $("status").textContent = "Downloading vocabulary…";
+  const vr = await fetch("models/vocab.json");
+  if (!vr.ok) throw new Error(`vocabulary: HTTP ${vr.status}`);
+  vocab = await vr.json();
   spEn = new SentencePiece(vocab.en);
   spAm = new SentencePiece(vocab.am);
-  await Promise.all([loadSessions("attention"), loadSessions("seq2seq")]);
-  $("status").textContent = "Models ready.";
+  // The best model first, so the page becomes usable as early as possible
+  await loadSessions("attention", "Downloading the translation model");
+  $("status").textContent = "Ready. Type an English sentence and press Translate.";
   $("go").disabled = false;
+  loadSessions("seq2seq", "Downloading the baseline model").catch((e) => console.error(e)); // background
   $("go").addEventListener("click", run);
   $("input").addEventListener("keydown", (e) => { if (e.key === "Enter" && !e.shiftKey) { e.preventDefault(); run(); } });
   document.querySelectorAll(".example").forEach((b) =>
@@ -132,4 +191,7 @@ async function init() {
   if ($("input").value.trim()) run();
 }
 
-init().catch((e) => { $("status").textContent = "Failed to load models: " + e.message; });
+init().catch((e) => {
+  console.error(e);
+  $("status").textContent = "Could not load the translator: " + e.message + ". Check your internet connection and reload the page.";
+});
