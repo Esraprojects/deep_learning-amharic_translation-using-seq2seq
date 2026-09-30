@@ -50,7 +50,7 @@ function num(n) { return n.toLocaleString("en-US"); }
 {
   const s = pres.addSlide();
   title(s, "Objective and workflow", "Develop, evaluate, compare and deploy an English→Amharic translator");
-  const steps = [["1", "Data", "OPUS MT560, cleaning, normalization, split"], ["2", "Tokenize", "SentencePiece subwords, 8k per language"],
+  const steps = [["1", "Data", "OPUS MT560 + habtew, cleaning, normalization, split"], ["2", "Tokenize", "SentencePiece subwords, 8k per language"],
                  ["3", "Train", "Seq2Seq-LSTM and Attention-LSTM, same budget"], ["4", "Evaluate", "BLEU, chrF, loss, time, parameters"],
                  ["5", "Analyze", "error categories and attention maps"], ["6", "Deploy", "FastAPI + Gradio, live browser demo"]];
   steps.forEach(([n, h, d], i) => {
@@ -67,7 +67,7 @@ function num(n) { return n.toLocaleString("en-US"); }
 // 3. Dataset -------------------------------------------------------------------
 {
   const s = pres.addSlide();
-  title(s, "Dataset: OPUS MT560 English–Amharic", "Hugging Face: michsethowusu/english-amharic_sentence-pairs_mt560  ·  License: CC-BY-4.0");
+  title(s, "Dataset: MT560 + habtew", "HF: michsethowusu/english-amharic_sentence-pairs_mt560 (CC-BY-4.0)  ·  habtew/english-amharic-translation (no license stated)");
   stat(s, 0.6, 1.9, 3.0, num(S.raw.pairs), "raw sentence pairs");
   stat(s, 0.6, 3.5, 3.0, num(S.train.pairs), "training pairs after cleaning");
   stat(s, 0.6, 5.1, 3.0, "3k / 5k", "validation / test pairs");
@@ -77,10 +77,10 @@ function num(n) { return n.toLocaleString("en-US"); }
     x: 4.0, y: 1.8, w: 5.0, h: 4.9, barDir: "bar", chartColors: [C.green], showValue: true, dataLabelPosition: "outEnd",
     dataLabelFormatCode: "#,##0", dataLabelFontSize: 11, catAxisLabelFontSize: 12, valAxisHidden: true, valGridLine: { style: "none" },
     catAxisOrientation: "maxMin", showTitle: true, title: "Cleaning funnel", titleFontSize: 14, titleColor: C.ink, catAxisLabelColor: C.muted });
-  bullets(s, ["Religious domain: Bible, Qur'an, Watchtower texts", "Amharic has 4× more word types than English (rich morphology)",
+  bullets(s, ["MT560: religious (Bible, Qur'an, Watchtower); habtew adds news and everyday sentences", "Amharic has 3× more word types than English (rich morphology)",
               "SOV word order in Amharic vs SVO in English", "Removed misaligned, duplicate and wrong-script pairs; homophone normalization (ሐ/ኀ/ሃ→ሀ, ሠ→ሰ, ዐ→አ, ፀ→ጸ)"],
           { x: 9.3, y: 1.9, w: 3.5, h: 4.8, fontSize: 14 });
-  s.addNotes("Explain why MT560 was chosen: documented license and 3x more data than the habtew set.");
+  s.addNotes("MT560 is the main corpus (documented license); habtew was added to cover everyday language. 88k habtew pairs remain after de-duplication.");
 }
 
 // 4. Models ----------------------------------------------------------------------
@@ -107,19 +107,19 @@ function num(n) { return n.toLocaleString("en-US"); }
   title(s, "Training configuration", "Identical for both models; 4-core CPU, no GPU");
   const rows = [["Embedding size", "256"], ["Hidden units", "256 (encoder 2×128 bidirectional)"], ["Layers", "2 encoder + 2 decoder"],
     ["Batch size", "128 (length-bucketed)"], ["Learning rate", "1e-3, halved on validation plateau"], ["Optimizer", "Adam, gradient clip 1.0"],
-    ["Epochs", "4 (150-minute budget per model)"], ["Loss", "Cross-entropy, label smoothing 0.1"], ["Dropout", "0.3"], ["Vocabulary", "SentencePiece unigram, 8k EN + 8k AM"]];
+    ["Epochs", `${m.attention.epochs_trained} (7-hour budget per model)`], ["Loss", "Cross-entropy, label smoothing 0.1"], ["Dropout", "0.3"], ["Vocabulary", "SentencePiece unigram, 8k EN + 8k AM"]];
   s.addTable([[{ text: "Hyper-parameter", options: { bold: true, color: C.white, fill: { color: C.green } } }, { text: "Value", options: { bold: true, color: C.white, fill: { color: C.green } } }],
     ...rows.map(([a, b], i) => [{ text: a, options: { bold: true, fill: { color: i % 2 ? C.white : C.light } } }, { text: b, options: { fill: { color: i % 2 ? C.white : C.light } } }])],
     { x: 0.6, y: 1.85, w: 6.0, colW: [2.3, 3.7], fontFace: B, fontSize: 14, color: C.ink, rowH: 0.43, border: { type: "none" } });
   s.addImage({ path: fig("training_curves.png"), x: 6.9, y: 2.6, w: 5.9, h: 5.9 * 520 / 1950 });
-  s.addText("Both models were still improving when the time budget ended; the gap opens in epoch 1.", { x: 6.9, y: 5.1, w: 5.9, h: 0.8, fontFace: B, fontSize: 14, italic: true, color: C.muted, margin: 0, isTextBox: true });
+  s.addText("The gap between the models opens in epoch 1 and keeps growing; both were still slowly improving.", { x: 6.9, y: 5.1, w: 5.9, h: 0.8, fontFace: B, fontSize: 14, italic: true, color: C.muted, margin: 0, isTextBox: true });
   s.addNotes("Training was resumable, with checkpoints every 250 steps.");
 }
 
 // 6. Results ------------------------------------------------------------------------
 {
   const s = pres.addSlide();
-  title(s, "Results: attention wins clearly", "Test set, 5,000 sentences, greedy decoding");
+  title(s, "Results: attention wins clearly", "Test set, 5,000 sentences, beam search (k=5)");
   stat(s, 0.6, 1.9, 2.8, String(m.attention.bleu), `BLEU with attention (baseline ${m.seq2seq.bleu})`);
   stat(s, 0.6, 3.5, 2.8, String(m.attention.chrf), `chrF with attention (baseline ${m.seq2seq.chrf})`);
   stat(s, 0.6, 5.1, 2.8, String(m.attention.test_loss.toFixed(2)), `test loss with attention (baseline ${m.seq2seq.test_loss.toFixed(2)})`);
@@ -132,26 +132,25 @@ function num(n) { return n.toLocaleString("en-US"); }
   const t = [["", "Seq2Seq", "Attention"], ["Parameters", num(m.seq2seq.parameters), num(m.attention.parameters)],
     ["Training time", `${m.seq2seq.training_time_min} min`, `${m.attention.training_time_min} min`],
     ["Test perplexity", String(m.seq2seq.test_perplexity), String(m.attention.test_perplexity)],
+    ["Beam / greedy BLEU", `${m.seq2seq.bleu} / ${m.seq2seq.bleu_greedy}`, `${m.attention.bleu} / ${m.attention.bleu_greedy}`],
     ["Inference / sentence", `${m.seq2seq.inference_ms_per_sentence_single} ms`, `${m.attention.inference_ms_per_sentence_single} ms`],
-    ["Test set (batched)", `${m.seq2seq.inference_time_test_set_sec} s`, `${m.attention.inference_time_test_set_sec} s`]];
+    ["Test set, beam", `${m.seq2seq.inference_time_test_set_sec} s`, `${m.attention.inference_time_test_set_sec} s`]];
   s.addTable(t.map((r, i) => r.map((c, j) => ({ text: c, options: { bold: i === 0 || j === 0, align: j ? "right" : "left", fill: { color: i === 0 ? C.mint : C.white } } }))),
-    { x: 8.4, y: 2.0, w: 4.4, colW: [1.9, 1.25, 1.25], fontFace: B, fontSize: 13, color: C.ink, rowH: 0.5, border: { type: "solid", pt: 0.5, color: "D9DEE3" } });
-  s.addText("+5.6 BLEU for +2.5% parameters; about 3 ms slower per sentence.", { x: 8.4, y: 5.4, w: 4.4, h: 0.9, fontFace: B, fontSize: 14, italic: true, color: C.green, margin: 0, isTextBox: true });
+    { x: 8.4, y: 2.0, w: 4.6, colW: [1.7, 1.45, 1.45], fontFace: B, fontSize: 13, color: C.ink, rowH: 0.5, border: { type: "solid", pt: 0.5, color: "D9DEE3" } });
+  s.addText(`+${(m.attention.bleu - m.seq2seq.bleu).toFixed(1)} BLEU for +2.5% parameters. Beam search adds +${(m.attention.bleu - m.attention.bleu_greedy).toFixed(1)} BLEU over greedy decoding.`, { x: 8.4, y: 5.95, w: 4.6, h: 0.9, fontFace: B, fontSize: 14, italic: true, color: C.green, margin: 0, isTextBox: true });
 }
 
 // 7. Examples --------------------------------------------------------------------------
 {
   const s = pres.addSlide();
-  title(s, "Translation examples", "Source → Reference → Seq2Seq → Attention-LSTM");
-  const ex = [["six years later, my father died.", "ከስድስት አመት በኋላ አባቴ ሞተ።", "አባቴ አባቴን ወለድኩ።", "ከሁለት አመት በኋላ አባቴ ሞተ።"],
-    ["what are some factors that promote this unity?", "ለዚህ አንድነት አስተዋጽኦ ያደረጉት አንዳንድ ነገሮች ምንድን ናቸው?", "ይህ ሲባል ምን ማለት ነው?", "ይህን አንድነት ለማጠናከር አንዳንድ ምክንያቶች ምንድን ናቸው?"],
-    ["songs: 100, 87", "መዝሙሮች፦ 100, 87", "መዝሙሮች፦ 10, 70", "መዝሙሮች፦ 100, 87"],
-    ["We must read the Bible every day.", "(new sentence)", "መጽሀፍ ቅዱስን ማጥናት ይኖርብናል።", "መጽሀፍ ቅዱስን በየእለቱ ማንበብ ይኖርብናል።"],
-    ["I am going to the university.", "ወደ ዩኒቨርሲቲ እሄዳለሁ።", "እኔ ግን እኔ ነኝ።", "እኔ ደግሞ በስሜት ቆየሁ።"]];
-  const hdr = ["Source (EN)", "Reference (AM)", "Seq2Seq + LSTM", "Attention-LSTM"].map((t) => ({ text: t, options: { bold: true, color: C.white, fill: { color: C.green }, fontFace: B } }));
+  title(s, "Translation examples", "Source → Seq2Seq → Attention-LSTM (beam search); full table with references in results/examples.md");
+  const AX = JSON.parse(fs.readFileSync(path.join(ROOT, "results/attention_examples.json"), "utf8"));
+  const pick = [0, 1, 4, 3, 7].map((i) => AX[i]);
+  const ex = pick.map((d) => [d.source, d.seq2seq, d.translation]);
+  const hdr = ["Source (EN)", "Seq2Seq + LSTM", "Attention-LSTM"].map((t) => ({ text: t, options: { bold: true, color: C.white, fill: { color: C.green }, fontFace: B } }));
   s.addTable([hdr, ...ex.map((r, i) => r.map((c, j) => ({ text: c, options: { fontFace: j ? AM : B, fontSize: j ? 15 : 13, fill: { color: i % 2 ? C.white : C.light } } })))],
-    { x: 0.6, y: 1.8, w: 12.1, colW: [3.1, 3.0, 3.0, 3.0], color: C.ink, rowH: 0.8, valign: "middle", border: { type: "none" } });
-  s.addText("The last row shows the domain limit: everyday words such as “university” are rare in this religious corpus.", { x: 0.6, y: 6.7, w: 12.1, h: 0.4, fontFace: B, fontSize: 13, italic: true, color: C.muted, margin: 0, isTextBox: true });
+    { x: 0.6, y: 1.8, w: 12.1, colW: [4.1, 4.0, 4.0], color: C.ink, rowH: 0.8, valign: "middle", border: { type: "none" } });
+  s.addText("With the added habtew data, everyday sentences like “university” now work; long rare sentences remain hard.", { x: 0.6, y: 6.7, w: 12.1, h: 0.4, fontFace: B, fontSize: 13, italic: true, color: C.muted, margin: 0, isTextBox: true });
 }
 
 // 8. Error analysis ----------------------------------------------------------------------
@@ -187,9 +186,9 @@ function num(n) { return n.toLocaleString("en-US"); }
   s.addImage({ path: fig("attention_2.png"), x: 0.6, y: 1.8, w: 5.0, h: 5.0 * 803 / 786 });
   s.addImage({ path: fig("attention_5.png"), x: 5.9, y: 1.9, w: 3.6, h: 3.6 * 605 / 728 });
   bullets(s, ["Learns the SOV reordering: the final verb አስተምሯቸዋል attends back to “taught”",
-              "“We must read the Bible every day” → the order is reversed: Bible, every day, read, must",
+              "“We must read the Bible every day” → Amharic order: every day, Bible, read, must",
               "The subject “we” becomes the verb suffix -ናል, so it has no attention row of its own",
-              "Failure case “university”: attention is diffuse and a frequent phrase is produced instead"],
+              "“I am going to the university” → ወደ ዩኒቨርሲቲው ሄድኩ: ዩኒቨርሲቲ attends to “university”, the suffix -ኩ to “I”"],
           { x: 9.7, y: 1.9, w: 3.2, h: 5.0, fontSize: 14 });
 }
 
@@ -220,7 +219,7 @@ function num(n) { return n.toLocaleString("en-US"); }
   stat(s, 8.8, 1.8, 3.6, `${ea.attention.number_copy_accuracy_pct}%`, "numbers copied correctly (baseline " + ea.seq2seq.number_copy_accuracy_pct + "%)", C.gold, C.mint);
   s.addText([
     { text: "Future work: ", options: { bold: true, color: C.gold } },
-    { text: "longer or GPU training · beam search with repetition penalty · coverage / input feeding · more general-domain data · Transformer baseline", options: { color: C.white } }],
+    { text: "GPU training for more epochs · coverage / input feeding against repetition · more general-domain data · Transformer baseline", options: { color: C.white } }],
     { x: 0.8, y: 4.4, w: 11.5, h: 1.0, fontFace: B, fontSize: 18, margin: 0, isTextBox: true });
   s.addText("Live demo  ·  esraprojects.github.io/deep_learning-amharic_translation-using-seq2seq", { x: 0.8, y: 6.2, w: 11.5, h: 0.5, fontFace: B, fontSize: 16, color: C.mint, margin: 0, isTextBox: true });
 }

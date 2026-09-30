@@ -7,35 +7,38 @@ with a **basic Seq2Seq + LSTM** baseline and an **attention-based Seq2Seq + LSTM
 
 | | |
 |---|---|
-| Dataset | OPUS **MT560** English–Amharic ([HF: `michsethowusu/english-amharic_sentence-pairs_mt560`](https://huggingface.co/datasets/michsethowusu/english-amharic_sentence-pairs_mt560)), **CC-BY-4.0** |
-| Models | Seq2Seq-LSTM (Sutskever et al. 2014) · Attention Seq2Seq-LSTM (Luong et al. 2015) |
+| Dataset | OPUS **MT560** English–Amharic ([`michsethowusu/english-amharic_sentence-pairs_mt560`](https://huggingface.co/datasets/michsethowusu/english-amharic_sentence-pairs_mt560), CC-BY-4.0) + [`habtew/english-amharic-translation`](https://huggingface.co/datasets/habtew/english-amharic-translation) (no license stated) · 517k training pairs |
+| Models | Seq2Seq-LSTM (Sutskever et al. 2014) · Attention Seq2Seq-LSTM (Luong et al. 2015) · beam search decoding |
 | Tokenization | SentencePiece unigram, 8k subwords per language |
 | Deployment | FastAPI `POST /translate` + Gradio UI (`app.py`, Docker) · static web demo (ONNX Runtime Web, GitHub Pages) |
 | Report | [`report/TECHNICAL_REPORT.md`](report/TECHNICAL_REPORT.md) · slides: [`report/presentation.pptx`](report/presentation.pptx) |
 
-## Results (test set, 5,000 sentences)
+## Results (test set, 5,000 sentences, beam search)
 
 | Metric | Seq2Seq + LSTM | **Attention Seq2Seq + LSTM** |
 |---|---:|---:|
-| BLEU ↑ | 2.97 | **8.57** |
-| chrF ↑ | 12.16 | **19.46** |
-| Test loss (CE) ↓ | 3.974 | **3.548** |
+| BLEU ↑ | 5.21 | **11.27** |
+| chrF ↑ | 13.52 | **22.84** |
+| BLEU with greedy decoding | 4.77 | 10.23 |
+| Test loss (CE) ↓ | 3.701 | **3.202** |
 | Parameters | 7,995,200 | 8,191,808 |
-| Training time (4-core CPU) | 150 min | 150 min |
-| Inference per sentence (single / batched) | 19.5 / 1.9 ms | 22.1 / 3.4 ms |
+| Training time (4-core CPU) | 420 min | 420 min |
+| Inference per sentence (beam / greedy batched) | 64 / 4.0 ms | 81 / 4.7 ms |
 
 **The attention model wins on every metric and in every sentence-length bucket.** Details:
 [comparison & error analysis](results/comparison.md) · [translation examples](results/examples.md) ·
 [error examples](results/error_analysis.md) · [full technical report](report/TECHNICAL_REPORT.md).
 
-| Attention: "Jesus taught his disciples to love one another." | BLEU by sentence length |
+| Attention: "I am going to the university." → ወደ ዩኒቨርሲቲው ሄድኩ። | BLEU by sentence length |
 |---|---|
-| ![attention](results/figures/attention_2.png) | ![length](results/figures/bleu_by_length.png) |
+| ![attention](results/figures/attention_1.png) | ![length](results/figures/bleu_by_length.png) |
 
-> The corpus is mostly religious text, so sentences from that domain translate best
-> ("We must read the Bible every day." → "መጽሀፍ ቅዱስን በየእለቱ ማንበብ ይኖርብናል።"), and
-> everyday sentences outside it are often translated poorly.
+**Improvements over version 1** (attention model): adding the habtew corpus for everyday language,
+training for 7 h instead of 2.5 h, and tuned beam search with repeat blocking raised BLEU from 8.57 to 11.27
+and chrF from 19.46 to 22.84, and cut repeated-word outputs from 24 % to 8 %.
 
+> The training data is still mostly religious text, so that domain translates best; household vocabulary
+> (e.g. "cooking dinner") is still often wrong.
 
 ## Group members
 
@@ -93,7 +96,8 @@ python app.py                     # or: uvicorn app:app --host 0.0.0.0 --port 78
 curl -X POST http://localhost:7860/translate \
      -H "Content-Type: application/json" \
      -d '{"text": "I am going to the university."}'
-# {"translation": "…", "model": "attention"}
+# {"translation": "ወደ ዩኒቨርሲቲው ሄድኩ።", "model": "attention"}
+# optional fields: "model": "seq2seq", "decoding": "greedy" (default: attention + beam search)
 
 # choose the baseline instead:
 curl -X POST http://localhost:7860/translate -H "Content-Type: application/json" \
@@ -109,9 +113,9 @@ With Docker: `docker build -t amharic-mt . && docker run -p 7860:7860 amharic-mt
 
 ```bash
 bash scripts/run_pipeline.sh              # everything below in one resumable command
-python src/preprocess.py                  # ≈3 min: data/processed/*, models/spm_{en,am}.model
-python src/train.py --model seq2seq   --emb 256 --hid 256 --layers 2 --batch_size 128 --epochs 5 --time_budget 150 --threads 2
-python src/train.py --model attention --emb 256 --hid 256 --layers 2 --batch_size 128 --epochs 5 --time_budget 150 --threads 2
+python src/preprocess.py                  # ≈6 min: downloads both corpora, data/processed/*, models/spm_{en,am}.model
+python src/train.py --model seq2seq   --emb 256 --hid 256 --layers 2 --batch_size 128 --epochs 12 --time_budget 420 --threads 2
+python src/train.py --model attention --emb 256 --hid 256 --layers 2 --batch_size 128 --epochs 12 --time_budget 420 --threads 2
 python src/evaluate.py                    # results/* and results/figures/*
 python src/export_onnx.py                 # web/models/* for the browser demo
 python tests/test_web_parity.py           # JS tokenizer == Python tokenizer
@@ -133,5 +137,5 @@ drop `--time_budget` and train longer for better scores.)
 
 ## License
 
-Code: MIT. The dataset (OPUS MT560) is CC-BY-4.0. Please cite OPUS / MT560 when you reuse the data.
+Code: MIT. OPUS MT560 is CC-BY-4.0 (please cite OPUS / MT560); habtew/english-amharic-translation states no license and is used here for coursework only.
 Noto Sans Ethiopic font: SIL Open Font License.

@@ -1,9 +1,12 @@
 """Dataset download, cleaning, normalization, de-duplication, splitting and
 SentencePiece tokenizer training.
 
-Dataset: OPUS MT560 English-Amharic sentence pairs, as packaged on the
-Hugging Face Hub (michsethowusu/english-amharic_sentence-pairs_mt560),
-license CC-BY-4.0.
+Datasets (Hugging Face Hub), combined:
+  * mt560  - OPUS MT560 English-Amharic (michsethowusu/english-amharic_sentence-pairs_mt560),
+             CC-BY-4.0; mostly religious text.
+  * habtew - habtew/english-amharic-translation (train/validation/test merged);
+             news, government and everyday sentences plus religious text.
+             No license is stated on its dataset card.
 
 Usage:
     python src/preprocess.py            # writes data/processed/* and models/spm_*.model
@@ -20,9 +23,13 @@ import sentencepiece as spm
 sys.path.insert(0, os.path.dirname(__file__))
 from text import ETHIOPIC_RE, LATIN_RE, normalize_am, normalize_en  # noqa: E402
 
-HF_ID = "michsethowusu/english-amharic_sentence-pairs_mt560"
-HF_URL = ("https://huggingface.co/datasets/" + HF_ID +
-          "/resolve/main/data/train-00000-of-00001.parquet")
+HF = "https://huggingface.co/datasets/"
+SOURCES = {
+    "mt560": [("mt560.parquet", HF + "michsethowusu/english-amharic_sentence-pairs_mt560"
+                                     "/resolve/main/data/train-00000-of-00001.parquet")],
+    "habtew": [(f"habtew_{s}.parquet", HF + f"habtew/english-amharic-translation/resolve/main/data/{s}-00000-of-00001.parquet")
+               for s in ("train", "validation", "test")],
+}
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 # Footnote markers such as "* ፍ1 *" and trailing footnote text "ፍ1 ..." (Bible).
@@ -30,18 +37,22 @@ _FOOTNOTE_MARK = re.compile(r"\*\s*ፍ\d+\s*\*")
 _FOOTNOTE_TAIL = re.compile(r"\s+ፍ\d+\s.*$")
 
 
-def load_raw(path):
-    if not os.path.exists(path):
-        os.makedirs(os.path.dirname(path), exist_ok=True)
-        try:
-            from datasets import load_dataset
-            ds = load_dataset(HF_ID, split="train")
-            ds.to_pandas().to_parquet(path)
-        except Exception:  # plain HTTP fallback
-            import urllib.request
-            urllib.request.urlretrieve(HF_URL, path)
-    df = pd.read_parquet(path)
-    return df.rename(columns={"eng": "en", "amh": "am"})[["en", "am"]]
+def load_source(name, raw_dir):
+    import urllib.request
+    frames = []
+    for fname, url in SOURCES[name]:
+        path = os.path.join(raw_dir, fname)
+        if not os.path.exists(path):
+            os.makedirs(raw_dir, exist_ok=True)
+            urllib.request.urlretrieve(url, path)
+        df = pd.read_parquet(path)
+        if "translation" in df.columns:  # habtew: {"translation": {"en": ..., "am": ...}}
+            df = pd.DataFrame(df.translation.tolist())
+        df = df.rename(columns={"eng": "en", "amh": "am"})[["en", "am"]]
+        frames.append(df)
+    df = pd.concat(frames, ignore_index=True)
+    df["src"] = name
+    return df
 
 
 def ethiopic_ratio(s):
@@ -68,7 +79,8 @@ def describe(df, name):
 
 def main():
     ap = argparse.ArgumentParser()
-    ap.add_argument("--raw", default=os.path.join(ROOT, "data/raw/mt560.parquet"))
+    ap.add_argument("--raw", default=os.path.join(ROOT, "data/raw"))
+    ap.add_argument("--sources", default="mt560,habtew")
     ap.add_argument("--out", default=os.path.join(ROOT, "data/processed"))
     ap.add_argument("--models", default=os.path.join(ROOT, "models"))
     ap.add_argument("--min_len", type=int, default=2)
@@ -82,8 +94,10 @@ def main():
     os.makedirs(args.models, exist_ok=True)
 
     log = []
-    df = load_raw(args.raw)
-    stats = {"raw": describe(df.astype(str), "raw")}
+    parts = [load_source(n, args.raw) for n in args.sources.split(",")]
+    df = pd.concat(parts, ignore_index=True)
+    stats = {"raw": describe(df.dropna().astype(str), "raw")}
+    stats["raw_by_source"] = {p.src.iloc[0]: describe(p.dropna().astype(str), p.src.iloc[0]) for p in parts}
     log.append(("raw pairs", len(df)))
 
     # 1. missing / empty
@@ -94,7 +108,7 @@ def main():
     log.append(("after dropping missing/empty", len(df)))
 
     # 2. exact duplicate pairs
-    df = df.drop_duplicates()
+    df = df.drop_duplicates(subset=["en", "am"])
     log.append(("after dropping exact duplicate pairs", len(df)))
 
     # 3. remove footnote artefacts, wrong-script pairs
@@ -118,7 +132,7 @@ def main():
     log.append((f"after length filter ({args.min_len}-{args.max_len} tokens, AM/EN ratio 0.3-1.6)", len(df)))
 
     # 6. duplicates after normalization; one translation per English source
-    df = df.drop_duplicates()
+    df = df.drop_duplicates(subset=["en", "am"])
     df = df.drop_duplicates(subset="en", keep="first")
     log.append(("after de-duplicating normalized pairs and repeated English sources", len(df)))
 
@@ -130,6 +144,7 @@ def main():
     for name, part in [("train", train), ("valid", val), ("test", test)]:
         part.to_csv(os.path.join(args.out, f"{name}.tsv"), sep="\t", index=False)
         stats[name] = describe(part, name)
+        stats[name]["by_source"] = part.src.value_counts().to_dict()
 
     # 8. SentencePiece (unigram) subword tokenizers, trained on train split only
     for lang in ["en", "am"]:

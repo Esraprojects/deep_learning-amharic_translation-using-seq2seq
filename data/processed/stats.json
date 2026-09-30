@@ -1,76 +1,114 @@
 {
   "raw": {
     "name": "raw",
-    "pairs": 669145,
-    "en_tokens_mean": 21.41,
+    "pairs": 906388,
+    "en_tokens_mean": 20.72,
     "en_tokens_median": 19.0,
-    "en_tokens_max": 120,
-    "am_tokens_mean": 14.59,
+    "en_tokens_max": 269,
+    "am_tokens_mean": 14.2,
     "am_tokens_median": 13.0,
-    "am_tokens_max": 118,
-    "en_word_types": 91739,
-    "am_word_types": 361906
+    "am_tokens_max": 227,
+    "en_word_types": 181960,
+    "am_word_types": 504603
+  },
+  "raw_by_source": {
+    "mt560": {
+      "name": "mt560",
+      "pairs": 669145,
+      "en_tokens_mean": 21.41,
+      "en_tokens_median": 19.0,
+      "en_tokens_max": 120,
+      "am_tokens_mean": 14.59,
+      "am_tokens_median": 13.0,
+      "am_tokens_max": 118,
+      "en_word_types": 91739,
+      "am_word_types": 361906
+    },
+    "habtew": {
+      "name": "habtew",
+      "pairs": 237243,
+      "en_tokens_mean": 18.79,
+      "en_tokens_median": 16.0,
+      "en_tokens_max": 269,
+      "am_tokens_mean": 13.11,
+      "am_tokens_median": 12.0,
+      "am_tokens_max": 227,
+      "en_word_types": 118947,
+      "am_word_types": 265857
+    }
   },
   "train": {
     "name": "train",
-    "pairs": 427665,
-    "en_tokens_mean": 15.51,
-    "en_tokens_median": 16.0,
+    "pairs": 517095,
+    "en_tokens_mean": 15.21,
+    "en_tokens_median": 15.0,
     "en_tokens_max": 25,
-    "am_tokens_mean": 11.11,
+    "am_tokens_mean": 10.97,
     "am_tokens_median": 11.0,
     "am_tokens_max": 25,
-    "en_word_types": 51458,
-    "am_word_types": 242578
+    "en_word_types": 56742,
+    "am_word_types": 270227,
+    "by_source": {
+      "mt560": 428957,
+      "habtew": 88138
+    }
   },
   "valid": {
     "name": "valid",
     "pairs": 3000,
-    "en_tokens_mean": 15.5,
-    "en_tokens_median": 16.0,
+    "en_tokens_mean": 15.13,
+    "en_tokens_median": 15.0,
     "en_tokens_max": 25,
-    "am_tokens_mean": 11.1,
+    "am_tokens_mean": 10.88,
     "am_tokens_median": 11.0,
     "am_tokens_max": 25,
-    "en_word_types": 6297,
-    "am_word_types": 11629
+    "en_word_types": 6208,
+    "am_word_types": 11448,
+    "by_source": {
+      "mt560": 2479,
+      "habtew": 521
+    }
   },
   "test": {
     "name": "test",
     "pairs": 5000,
-    "en_tokens_mean": 15.62,
+    "en_tokens_mean": 15.35,
     "en_tokens_median": 16.0,
     "en_tokens_max": 25,
-    "am_tokens_mean": 11.22,
+    "am_tokens_mean": 11.12,
     "am_tokens_median": 11.0,
     "am_tokens_max": 25,
-    "en_word_types": 8368,
-    "am_word_types": 16737
+    "en_word_types": 8305,
+    "am_word_types": 16863,
+    "by_source": {
+      "mt560": 4229,
+      "habtew": 771
+    }
   },
   "cleaning_log": [
     {
       "step": "raw pairs",
-      "pairs": 669145
+      "pairs": 906388
     },
     {
       "step": "after dropping missing/empty",
-      "pairs": 669145
+      "pairs": 906386
     },
     {
       "step": "after dropping exact duplicate pairs",
-      "pairs": 669094
+      "pairs": 884756
     },
     {
       "step": "after script filter (EN has no Ge'ez, AM >= 90% Ge'ez letters)",
-      "pairs": 663293
+      "pairs": 878906
     },
     {
       "step": "after length filter (2-25 tokens, AM/EN ratio 0.3-1.6)",
-      "pairs": 442746
+      "pairs": 583019
     },
     {
       "step": "after de-duplicating normalized pairs and repeated English sources",
-      "pairs": 435665
+      "pairs": 525095
     }
   ]
 }

@@ -10,87 +10,98 @@ Instructor: Fantahun Bogale Gereme · Group members: _see README_
 We build, evaluate, compare and deploy an English→Amharic neural machine translation system.
 Two recurrent models are trained on the same data under the same compute budget: a **basic
 Seq2Seq + LSTM** encoder–decoder (the only link between encoder and decoder is the final
-hidden state) and an **Attention-based Seq2Seq + LSTM** (Luong global attention). On a held-out
-test set of 5,000 sentences, the attention model reaches **8.57 BLEU / 19.46 chrF** against
-**2.97 BLEU / 12.16 chrF** for the baseline. Its test perplexity is also lower (34.7 vs 53.2), with
-2.5 % more parameters. It wins in every sentence-length bucket, copies numbers correctly 94 % of the
-time (baseline 38 %) and translates named entities more reliably. The best model is served through a
-FastAPI `POST /translate` endpoint with a Gradio UI, and through a public browser demo that runs the
-model client-side with ONNX Runtime Web.
+hidden state) and an **Attention-based Seq2Seq + LSTM** (Luong global attention).
+
+Training data is 517k sentence pairs from two public corpora: OPUS MT560, which is mostly religious
+text, and habtew/english-amharic-translation, which adds news and everyday sentences. Output is
+decoded with tuned beam search.
+
+On a held-out test set of 5,000 sentences:
+
+| | BLEU | chrF | Test perplexity |
+|---|---:|---:|---:|
+| Seq2Seq + LSTM | 5.21 | 13.52 | 40.5 |
+| **Attention + LSTM** | **11.27** | **22.84** | **24.6** |
+
+The attention model has only 2.5 % more parameters. It wins in every sentence-length bucket and on both
+data sources, and copies numbers correctly 97 % of the time (baseline 71 %). The best model is served through
+a FastAPI `POST /translate` endpoint with a Gradio UI, and through a public browser demo that runs the model
+client-side with ONNX Runtime Web.
+
+> **Version note.** A first version of this project used MT560 only, 4 epochs (2.5 h) and greedy
+> decoding, and reached 8.57 BLEU / 19.46 chrF with the attention model. It failed on everyday
+> sentences, e.g. *"I am going to the university."* → *"እኔ ደግሞ በስሜት ቆየሁ"*. This report describes the
+> improved version: more data, 7 h of training and beam search. Now *"I am going to the university."*
+> → *"ወደ ዩኒቨርሲቲው ሄድኩ።"* ("I went to the university"). The two test sets differ (the new one also
+> contains habtew sentences), so the version-1 numbers are only a rough reference.
 
 ---
 
 ## 1. Dataset & preprocessing
 
-### 1.1 Source and license
-* **Dataset:** OPUS **MT560** English–Amharic parallel corpus, as packaged on the Hugging Face Hub:
-  [`michsethowusu/english-amharic_sentence-pairs_mt560`](https://huggingface.co/datasets/michsethowusu/english-amharic_sentence-pairs_mt560).
-  Original source: [OPUS MT560](https://opus.nlpl.eu/MT560).
-* **License:** Creative Commons Attribution 4.0 (CC-BY-4.0).
-* We chose it over `habtew/english-amharic-translation` because its license is documented and it is
-  about 3× larger (669k vs 237k pairs). Both corpora are dominated by the same religious sources.
+### 1.1 Sources and licenses
+| Corpus | Hugging Face ID | Content | License | Raw pairs |
+|---|---|---|---|---:|
+| **OPUS MT560** (main) | [`michsethowusu/english-amharic_sentence-pairs_mt560`](https://huggingface.co/datasets/michsethowusu/english-amharic_sentence-pairs_mt560), from [OPUS MT560](https://opus.nlpl.eu/MT560) | Bible, Qur'an, Watchtower/Awake! publications, software strings | **CC-BY-4.0** | 669,145 |
+| **habtew** (added) | [`habtew/english-amharic-translation`](https://huggingface.co/datasets/habtew/english-amharic-translation) (train + validation + test merged, then re-split) | news, government texts, everyday sentences, plus religious text | *not stated on the dataset card*; used here for non-commercial coursework only | 237,243 |
 
-### 1.2 Size and characteristics (raw)
+habtew was added because the first version showed that a purely religious corpus cannot translate
+everyday sentences.
+
+### 1.2 Size and characteristics (raw, combined)
 | Property | Value |
 |---|---|
-| Sentence pairs | 669,145 |
-| Mean / median / max English tokens | 21.4 / 19 / 120 |
-| Mean / median / max Amharic tokens | 14.6 / 13 / 118 |
-| English word types | 91,739 |
-| Amharic word types | 361,906 |
+| Sentence pairs | 906,388 |
+| Mean / median / max English tokens | 20.7 / 19 / 269 |
+| Mean / median / max Amharic tokens | 14.2 / 13 / 227 |
+| English word types | 181,960 |
+| Amharic word types | 504,603 |
 
 Observations:
-* **Domain:** mostly religious text (Bible translations, the Qur'an, Watchtower/Awake! publications),
-  plus some software-localization strings. About 24 % of test sentences contain *jehovah / god / bible / jesus*.
-* **Morphology:** Amharic has ~4× more word types than English for the same content. It is highly
-  inflected: subject/object agreement, prepositions and possessives attach to the verb or noun
-  (e.g. *አስተምሯቸዋል* = "he taught them"). A word-level vocabulary would therefore be very sparse.
+* **Domain:** still dominated by religious text. After de-duplication, 83 % of the training pairs come
+  from MT560 and 17 % from habtew. The two corpora overlap heavily, since both contain Watchtower texts.
+* **Morphology:** Amharic has about 3× more word types than English for the same content. It is highly
+  inflected: subject/object agreement, prepositions and possessives attach to the word
+  (e.g. *አስተምሯቸዋል* = "he taught them").
 * **Word order:** English is SVO; Amharic is **SOV** with the verb at the end of the sentence.
-* **Noise:** the data is already whitespace-tokenized ("God 's"). It has Ge'ez punctuation variants
-  (`፡፡` vs `።`), Bible footnote markers (`* ፍ1 *`), some misaligned pairs, and pairs in the wrong script.
+* **Noise:** MT560 is pre-tokenized ("God 's"). There are Ge'ez punctuation variants (`፡፡` vs `።`),
+  Bible footnote markers (`* ፍ1 *`), misaligned pairs, pairs in the wrong script, and many duplicates
+  between the two corpora.
 
 ### 1.3 Cleaning & normalization (`src/preprocess.py`, `src/text.py`)
 | Step | Pairs left |
 |---|---:|
-| Raw | 669,145 |
-| Drop missing / empty | 669,145 |
-| Drop exact duplicate pairs | 669,094 |
-| Remove footnote markers; drop wrong-script pairs (EN must have no Ge'ez, AM must be ≥ 90 % Ge'ez letters) | 663,293 |
-| Normalize; keep 2–25 tokens per side and an AM/EN length ratio in [0.3, 1.6] (removes misalignments) | 442,746 |
-| De-duplicate normalized pairs; keep one translation per English source | **435,665** |
+| Raw (both corpora) | 906,388 |
+| Drop missing / empty | 906,386 |
+| Drop exact duplicate pairs | 884,756 |
+| Remove footnote markers; drop wrong-script pairs (EN must have no Ge'ez, AM must be ≥ 90 % Ge'ez letters) | 878,906 |
+| Normalize; keep 2–25 tokens per side and an AM/EN length ratio in [0.3, 1.6] (removes misalignments) | 583,019 |
+| De-duplicate normalized pairs; keep one translation per English source | **525,095** |
 
-**English normalization:** Unicode NFKC, unified quotes and dashes, lower-casing, and every
-punctuation character split off as its own token.
+**English normalization:** Unicode NFKC, unified quotes and dashes, lower-casing, and every punctuation
+character split off as its own token. This makes raw user input ("God's") match the pre-tokenized
+corpus ("God 's").
 
 **Amharic normalization:** NFC, `፡፡` / `::` → `።`, punctuation split off, and the standard **homophone
-normalization** used in Amharic NLP. Characters that sound identical in modern Amharic are mapped to
-one form: ሐ/ኀ/ሃ → ሀ, ሠ → ሰ, ዐ/ኣ → አ, ፀ → ጸ (all seven vowel orders), and a few labialized
-forms. This reduces spelling variation, e.g. *ኃጢአት / ሀጢአት / ኀጢአት* → *ሀጢአት*.
-The model therefore outputs normalized spelling. It is readable, but it is not always the official
-orthography.
+normalization** used in Amharic NLP: ሐ/ኀ/ሃ → ሀ, ሠ → ሰ, ዐ/ኣ → አ, ፀ → ጸ (all seven vowel orders), plus
+a few labialized forms. Output therefore uses normalized, not always official, spelling.
 
-Keeping one translation per English source also ensures that **no test source sentence occurs in training**.
+Keeping one translation per English source guarantees that **no test source sentence occurs in training**.
 
 ### 1.4 Tokenization & vocabulary
 **SentencePiece unigram** models (identity normalization, digits split), trained on the training split
-only, one per language:
-
-| | English | Amharic |
-|---|---:|---:|
-| Vocabulary (incl. `<pad>=0, <unk>=1, <s>=2, </s>=3`) | 8,000 | 8,000 |
-| Mean subwords / sentence (train) | 17.2 | 16.8 |
-
-Subwords let the decoder build rare inflected Amharic forms from pieces
-(e.g. `▁ያ` + `ንጸባረቀ` + `ውን`). They also keep the output layer small enough for CPU training.
+only, one per language. Each has a vocabulary of **8,000** pieces, including `<pad>=0, <unk>=1, <s>=2,
+</s>=3`. The mean is 17.0 English and 16.7 Amharic subwords per training sentence. Subwords let the
+decoder build rare inflected Amharic forms from pieces, and keep the output layer small enough for CPU training.
 
 ### 1.5 Split
 Random shuffle (seed 42) after de-duplication:
 
-| Split | Pairs | Mean EN tokens | Mean AM tokens |
-|---|---:|---:|---:|
-| Train | 427,665 | 15.5 | 11.1 |
-| Validation | 3,000 | 15.5 | 11.1 |
-| Test | 5,000 | 15.6 | 11.2 |
+| Split | Pairs | from MT560 | from habtew | Mean EN / AM tokens |
+|---|---:|---:|---:|---|
+| Train | 517,095 | 428,957 | 88,138 | 15.2 / 11.0 |
+| Validation | 3,000 | 2,479 | 521 | 15.1 / 10.9 |
+| Test | 5,000 | 4,229 | 771 | 15.4 / 11.1 |
 
 ---
 
@@ -99,19 +110,18 @@ Random shuffle (seed 42) after de-duplication:
 ### 2.1 Architectures (`src/models.py`)
 Both models share **the same encoder**, so the comparison isolates the effect of attention.
 
-* **Encoder:** embedding (256) → 2-layer **bidirectional LSTM** (128 units per direction = 256).
-  The final forward/backward states of each layer are concatenated to initialise the decoder.
-* **Basic Seq2Seq + LSTM** (Sutskever et al., 2014): the decoder is a 2-layer LSTM (256) initialised
-  with the encoder's final states. It sees nothing else from the source, so the whole sentence must fit
-  in a fixed-size vector. Output: `Linear(256 → 8000)` + softmax.
-* **Attention Seq2Seq + LSTM** (Luong et al., 2015, global "general" attention): the same decoder, plus
-  at every step *t*:
+* **Encoder:** embedding (256) → 2-layer **bidirectional LSTM** (128 units per direction = 256). The final
+  forward/backward states of each layer are concatenated to initialise the decoder.
+* **Basic Seq2Seq + LSTM** (Sutskever et al., 2014): a 2-layer LSTM decoder (256) initialised with the
+  encoder's final states. It sees nothing else from the source, so the whole sentence must fit in a
+  fixed-size vector. Output: `Linear(256 → 8000)` + softmax.
+* **Attention Seq2Seq + LSTM** (Luong et al., 2015, global "general" attention): the same decoder, plus at
+  every step *t*:
   * `score(h_t, h̄_s) = h_tᵀ W_a h̄_s`, `a_t = softmax(score)` over all source positions (padding masked)
   * `c_t = Σ_s a_t,s h̄_s` (context vector), `h̃_t = tanh(W_c [h_t ; c_t])`, `p(y_t) = softmax(W_o h̃_t)`
 
-  This adds only `W_a` (256×256) and `W_c` (512×256), i.e. +196k parameters (+2.5 %).
-  Input feeding was left out so that the whole target sequence runs through the LSTM in one call.
-  That made training 2× faster on CPU.
+  This adds only `W_a` (256×256) and `W_c` (512×256), i.e. +196k parameters (+2.5 %). Input feeding was
+  left out so the whole target sequence runs through the LSTM in one call, which is 2× faster on CPU.
 
 ### 2.2 Training configuration (`src/train.py`)
 | Hyper-parameter | Value (both models) |
@@ -125,99 +135,135 @@ Both models share **the same encoder**, so the comparison isolates the effect of
 | Loss | Token-level cross-entropy with label smoothing 0.1, padding ignored (test loss reported **without** smoothing) |
 | Gradient clipping | global norm 1.0 |
 | Teacher forcing | 100 % during training |
-| Epochs | 5 planned; stopped by a **150-minute budget** per model → 3 full epochs + 65–73 % of the 4th |
+| Epochs | 12 planned; stopped by a **7-hour budget** per model → 5 full epochs + 50–63 % of the 6th |
 | Hardware | 4-core CPU, no GPU; both models trained in parallel with 2 threads each |
-| Checkpointing | best validation-loss model saved as `models/{seq2seq,attention}.pt`; resumable training state |
-| Decoding | greedy, max length 2·|src| + 10 |
+| Checkpointing | best validation-loss model saved as `models/{seq2seq,attention}.pt`; resumable state every 250 steps |
 
 ![training curves](../results/figures/training_curves.png)
 
-Both models were still improving when the budget ran out, so more epochs (or a GPU) would raise both
-scores. The gap between the models, however, opens in epoch 1 and keeps growing.
+The attention model is ahead from the first epoch (validation BLEU 7.5 vs 2.3 after epoch 1, and 11.4 vs 6.4
+at the end). Both validation losses were still decreasing slowly when the budget ran out.
+
+### 2.3 Decoding: beam search (`beam_search` in `src/models.py`)
+Beam search (k = 5) with GNMT length normalization `score / ((5+|y|)/6)^α` and optional **n-gram
+blocking**: an output subword 3-gram may occur only once. α and the blocking were tuned on 500 validation
+sentences with the attention model, and the same settings are used for both models
+([`results/decoding_tuning.json`](../results/decoding_tuning.json)):
+
+| Setting (validation) | BLEU |
+|---|---:|
+| greedy | 11.39 |
+| beam 5, α = 0.2 | 12.15 |
+| beam 5, α = 0.7 (± blocking) | 12.54 / 12.56 |
+| beam 5, α = 1.0, no blocking | 12.77 |
+| **beam 5, α = 1.0, 3-gram blocking (chosen)** | **12.70** |
+
+Blocking is chosen because it is within 0.2 BLEU of the best setting while removing visible "word word word"
+loops (see §4). The same algorithm is re-implemented in JavaScript for the browser demo (`web/beam.js`).
+It gives identical outputs to the Python version on 50/50 test sentences.
 
 ---
 
 ## 3. Evaluation & comparison (`src/evaluate.py`)
 
-Test set: 5,000 sentences, greedy decoding. BLEU and chrF are corpus-level scores from sacrebleu 2.6 on
-normalized, punctuation-tokenized Amharic.
+Test set: 5,000 sentences. BLEU and chrF are corpus-level scores from sacrebleu 2.6 on normalized,
+punctuation-tokenized Amharic.
 
 | Metric | Seq2Seq + LSTM | Attention Seq2Seq + LSTM |
 |---|---:|---:|
-| **BLEU** ↑ | 2.97 | **8.57** |
-| **chrF** ↑ | 12.16 | **19.46** |
-| **Test loss (CE)** ↓ | 3.974 | **3.548** |
-| Test perplexity ↓ | 53.2 | **34.7** |
+| **BLEU** (beam search) ↑ | 5.21 | **11.27** |
+| **chrF** (beam search) ↑ | 13.52 | **22.84** |
+| BLEU / chrF with greedy decoding | 4.77 / 13.23 | 10.23 / 21.62 |
+| **Test loss (CE)** ↓ | 3.701 | **3.202** |
+| Test perplexity ↓ | 40.5 | **24.6** |
 | **Parameters** | 7,995,200 | 8,191,808 |
 | Model size | 30.5 MB | 31.3 MB |
-| **Training time** | 150.1 min (4 epochs*) | 150.2 min (4 epochs*) |
-| **Inference time**, whole test set (batch 100) | **9.7 s** | 16.8 s |
-| Inference per sentence, batched | **1.9 ms** | 3.4 ms |
-| Inference per sentence, single request (API setting) | **19.5 ms** | 22.1 ms |
+| **Training time** | 420 min (6 epochs*) | 420 min (6 epochs*) |
+| **Inference time**, whole test set, greedy (batch 100) | **20.2 s** | 23.3 s |
+| Inference time, whole test set, beam search (one sentence at a time) | 406 s | 394 s |
+| Inference per sentence, greedy batched | **4.0 ms** | 4.7 ms |
+| Inference per sentence, beam search (API setting) | **64 ms** | 81 ms |
 
-\* the 4th epoch was partial (see §2.2).
+\* the 6th epoch was partial (see §2.2).
 
-**The attention model is clearly better:** +5.6 BLEU (2.9× the baseline) and +7.3 chrF, with a lower
-test loss for almost the same number of parameters. The price is roughly 1.7× slower batched decoding,
-because attention over all source states runs at every step. For single-sentence requests the difference
-is only about 3 ms (22 ms vs 19.5 ms on CPU), which does not matter for an interactive application.
+**BLEU by data source (beam search)**
 
-BLEU is low in absolute terms. That is expected for small LSTMs, trained for 2.5 CPU-hours, on a
-morphologically rich target language where one wrong affix makes the whole word count as a BLEU miss.
-chrF, which gives credit for partly correct words, shows the same ranking.
+| Test subset | n | Seq2Seq | Attention |
+|---|---:|---:|---:|
+| MT560 (religious) | 4,229 | 4.67 | **10.50** |
+| habtew (news / everyday / religious) | 771 | 8.20 | **15.75** |
+
+**The attention model is clearly better:** +6.1 BLEU (2.2× the baseline) and +9.3 chrF, with a much lower
+perplexity for almost the same number of parameters. Beam search adds about +1.0 BLEU to each model over
+greedy decoding. Attention costs roughly 17 ms more per sentence with beam search on CPU, which does not
+matter for an interactive application.
+
+**Effect of the improvements (attention model):**
+
+| Version | Data | Training | Decoding | BLEU | chrF |
+|---|---|---|---|---:|---:|
+| v1 | MT560 (428k) | 4 epochs, 2.5 h | greedy | 8.57 | 19.46 |
+| v2 | MT560 + habtew (517k) | 6 epochs, 7 h | greedy | 10.23 | 21.62 |
+| **v2** | MT560 + habtew (517k) | 6 epochs, 7 h | **beam search** | **11.27** | **22.84** |
+
+BLEU is still low in absolute terms. That is expected for small LSTMs trained on a CPU for a few hours, with
+a morphologically rich target language where one wrong affix makes the whole word count as a BLEU miss. chrF,
+which gives credit for partly correct words, shows the same ranking.
 
 ### 3.1 Translation examples
-Source → Reference → Seq2Seq output → Attention-LSTM output (test set; full table with 25 rows in
+Source → Reference → Seq2Seq output → Attention-LSTM output (test set, beam search; 25-row table in
 [`results/examples.md`](../results/examples.md); all 5,000 outputs in `results/test_predictions.tsv`).
 
 | Source (EN) | Reference (AM) | Seq2Seq + LSTM | Attention-LSTM |
 |---|---|---|---|
-| paul and other first-century christians learned this kind of love from the teachings of jesus. | (ለ) ኢየሱስ ያንጸባረቀውን አይነት ፍቅርና ትህትና ማሳየት ምን ያህል አስፈላጊ ነው? *(misaligned reference)* | ጳውሎስና ጳውሎስ ክርስቲያኖችን በተመለከተ ኢየሱስ ክርስቶስ በፊልጵስዩስ ክርስቲያኖች ላይ እምነት ነበራቸው። | ጳውሎስና ሌሎች በመጀመሪያው መቶ ዘመን ክርስቲያኖች ከኢየሱስ ትምህርቶች ጋር ፍቅር እንዳላቸው አሳይተዋል። |
-| indeed, "his loving-kindness is to time indefinite." - psalm 100:5. | በእርግጥም "ምህረቱ … ለዘላለም" ነው። - መዝሙር 100: 5 | በእርግጥም "ይሆዋ" ታላቅ ሰው ነው።" - 1 ቆሮንቶስ 00: 10 | በእርግጥም "ፍቅራዊ ደግነትን ለዘላለም ነው።" - መዝሙር 100: 5 |
-| six years later, my father died. | ከስድስት አመት በኋላ አባቴ ሞተ። | አባቴ አባቴን ወለድኩ። | ከሁለት አመት በኋላ አባቴ ሞተ። |
-| songs: 100, 87 | መዝሙሮች፦ 100, 87 | መዝሙሮች፦ 10, 70 | መዝሙሮች፦ 100, 87 |
-| what are some factors that promote this unity? | ለዚህ አንድነት አስተዋጽኦ ያደረጉት አንዳንድ ነገሮች ምንድን ናቸው? | ይህ ሲባል ምን ማለት ነው? | ይህን አንድነት ለማጠናከር አንዳንድ ምክንያቶች ምንድን ናቸው? |
-| therefore, they asked him: "lord, teach us how to pray." | በዚህም የተነሳ "መጸለይን አስተምረን" ብለው ጠይቀውት ነበር። | ስለዚህ "እግዚአብሄር ሆይ፣ … " የሚለውን ቃል ጸልዩ። | ስለዚህ "ጌታ ሆይ፣ መጸለይ እንዴት እንደሚጸልዩ አስተምረን" ብለው ይመለሱ ነበር። |
-| but in order for your children to find happiness, you also need to teach them to love god and to learn from him. | ሆኖም ልጆቻችሁ ደስተኞች እንዲሆኑ አምላክን እንዲወዱና እሱ የሚላቸውን ነገር እንዲሰሙ ማስተማርም ያስፈልጋችኋል። | ይሁን እንጂ ልጆቻችሁን ለአምላክና ፍቅርን በማዳመጥ ረገድ ጥሩ ምሳሌ ማግኘት ትችላለህ። | ይሁን እንጂ ልጆቻችሁ ደስታ ለማግኘትና ከእሱ መማር እንዲችሉ አምላክን እንዲያውቁ ለመርዳት ጥረት ማድረግ ይኖርብሀል። |
-| peru has put great effort into reducing its maternal mortality rate. | በፔሩ የእናቶችን ሞት ለመቀነስ ከፍተኛ ጥረት እየተደረገ ነው። | ምስጢን በጭንት ላይ የሚሰነዘርበት ጊዜ ምስጢን ውሸት። | ሪፖርቱ ሪፖርት ሪፖርት ፕሬድ ሪፖርት … *(degenerate repetition)* |
+| if it did, could we protect ourselves? | በሽታው ቢከሰት ራሳችንን መጠበቅ እንችላለን? | እንዲህ ማድረግ የምንችለው እንዴት ነው? | ታዲያ ራሳችንን መጠበቅ እንችላለን? |
+| wisdom - more precious than gold | ከወርቅ ይበልጥ ውድ የሆነው ጥበብ | ጥበብን የሚያከብር ጥበብ ነው | ጥበብ - ከወርቅ ይበልጥ ውድ ሀብት |
+| and on all the tribes of israel | በእስራኤል ነገዶች ሁሉ ላይ ነውና፤ | በእስራኤልም መካከል | በእስራኤልም ነገዶች ሁሉ ላይ |
+| elders, for instance, are appointed by holy spirit. | ለምሳሌ ያህል፣ ሽማግሌዎች የሚሾሙት በመንፈስ ቅዱስ ነው። | ለምሳሌ ያህል፣ ሽማግሌዎች መንፈስ ቅዱስ ናቸው። | ለምሳሌ ያህል፣ ሽማግሌዎች በመንፈስ ቅዱስ ተሾሙ። |
+| they also began to study the bible and quit their bad associations. | በተጨማሪም መጽሀፍ ቅዱስ ማጥናትና ከመጥፎ ባልንጀሮቻቸው መራቅ ጀመሩ። | በተጨማሪም መጽሀፍ ቅዱስን ማጥናት ጀመሩ። *(drops 2nd half)* | ከዚህም በተጨማሪ መጽሀፍ ቅዱስን ማጥናትና መጥፎ ጓደኝነትን አቋርጡ። |
+| ex. 1:8, 9, 13, 14. | ዘጸ 1፥ 8, 9, 13, 14 | ዘጸ 18፥ 1, 15, 38 | ዘጸ 1፥ 8, 9, 13, 24 |
+| "i stopped worrying about myself," says shane. | ሼን "ስለ ራሴ መጨነቄን አቆምኩ" በማለት ተናግሯል። | እንዲህ ብላለች: - "ጤንነቴን መቆጣጠር ጀመርኩ። | "ስለ ራሴ መጨነቅ ጀመርኩ" ብላለች። *(stopped → started)* |
+| the next day, however, both he and the professor traveled all the way to my home village … | *(misaligned reference)* | ይሁን እንጂ በቀጣዩ ቀን ወደ ቤት ሄድኩ። | በሚቀጥለው ቀን ግን ፕሮፌሰርና ፕሮፌሰር ፕሮፌሰር ወደ ቤቴ ሄድኩ። |
 
 New sentences (not from the corpus):
 
 | Input | Attention-LSTM | Seq2Seq + LSTM |
 |---|---|---|
-| Jesus taught his disciples to love one another. | ኢየሱስ ደቀ መዛሙርቱ እርስ በርሳቸው እንዲወዱ አስተምሯቸዋል። ✔ | ኢየሱስ ደቀ መዛሙርቱን ፍቅር አሳይቷል። |
-| We must read the Bible every day. | መጽሀፍ ቅዱስን በየእለቱ ማንበብ ይኖርብናል። ✔ | መጽሀፍ ቅዱስን ማጥናት ይኖርብናል። |
-| that one is none other than jehovah god. | ይህ ሰው ከይሆዋ አምላክ ሌላ ሌላ አይደለም። | ይሆዋ አምላክ ነው። |
-| I am going to the university. | እኔ ደግሞ በስሜት ቆየሁ። ✘ | እኔ ግን እኔ ነኝ። ✘ |
-| My mother is cooking dinner for the family. | እናቴ ቤተሰብን ለመንከባከብ ፈቃደኛ ነው። ✘ | እናቴን ቤተሰቦቼን ወስደዋል። ✘ |
+| I am going to the university. | ወደ ዩኒቨርሲቲው ሄድኩ። ✔ (tense: "I went") | ብዬ አሰብኩ። ✘ |
+| Jesus taught his disciples to love one another. | ኢየሱስ ደቀ መዛሙርቱ እርስ በርስ እንዲወደዱ አስተምሯቸዋል። ✔ | ኢየሱስ ደቀ መዛሙርቱ እርስ በርስ እርስ በርስ ተነጋገሩ። |
+| We must read the Bible every day. | በየእለቱ መጽሀፍ ቅዱስን ማንበብ ይኖርብናል። ✔ | መጽሀፍ ቅዱስን በየእለቱ ማንበብ ይኖርብናል። ✔ |
+| God created the heavens and the earth. | ሰማያትንና ምድርን ፈጠረ። ✔ (subject dropped) | አምላክ ሰማያትንና ምድርን ፈጠረ። ✔ |
+| The children are playing in the garden. | ልጆች ገነት በምትሆነው ገነት ውስጥ ናቸው። ✘ ("garden" → "paradise") | ልጆችም መኖሪያዎች ናቸው። ✘ |
+| My mother is cooking dinner for the family. | እናቴ ለቤተሰቤ መንዳት ትችል ነበር። ✘ | የቤተሰቦቿን ቤተሰቤን አቋቁሟል። ✘ |
 
 ---
 
 ## 4. Error & attention analysis
 
-### 4.1 Automatic error indicators (test set)
+### 4.1 Automatic error indicators (test set, beam search)
 | Error type | Indicator | Seq2Seq | Attention |
 |---|---|---:|---:|
-| Missing words | outputs < 70 % of reference length | 26.6 % | **17.2 %** |
-| Additional words | outputs > 130 % of reference length | **10.1 %** | 13.7 % |
-| (length) | mean length ratio hyp/ref (ideal 1.0) | 0.90 | **1.01** |
-| Repeated words | outputs with a repeated word or bigram | **18.9 %** | 24.1 % |
-| Incorrect word order | mean order agreement of shared words (ideal 1.0) | 0.940 | **0.942** |
-| | sentences with order agreement < 0.6 | 5.0 % | **4.4 %** |
-| Incorrect morphology | output words with the right stem but the wrong inflection | **3.7 %** | 5.7 % |
-| Named entities | 25 frequent names (Jehovah, Jesus, Moses, Israel, Egypt, …) translated correctly | 85.1 % | **89.4 %** |
-| Numbers | all source numbers copied correctly | 38.3 % | **93.6 %** |
-| Unknown / rare words | BLEU on sentences with a word seen < 5 times in training | 0.7 | **3.2** |
-| | BLEU on the other sentences | 3.2 | **9.3** |
+| Missing words | outputs < 70 % of reference length | 40.2 % | **26.1 %** |
+| Additional words | outputs > 130 % of reference length | **5.9 %** | 6.4 % |
+| (length) | mean length ratio hyp/ref (ideal 1.0) | 0.80 | **0.88** |
+| Repeated words | outputs with a repeated word or bigram (beam + blocking) | **5.9 %** | 8.3 % |
+| | … with greedy decoding | 18.3 % | 16.0 % |
+| Incorrect word order | mean order agreement of shared words (ideal 1.0) | 0.953 | 0.950 |
+| | sentences with order agreement < 0.6 | 4.0 % | **3.7 %** |
+| Incorrect morphology | output words with the right stem but the wrong inflection | **3.8 %** | 5.6 % |
+| Named entities | 25 frequent names (Jehovah, Jesus, Moses, Israel, Egypt, …) correct | 81.9 % | **88.2 %** |
+| Numbers | all source numbers copied correctly | 70.8 % | **96.6 %** |
+| Unknown / rare words | BLEU on sentences with a word seen < 5 times in training | 1.9 | **4.2** |
+| | BLEU on the other sentences | 5.6 | **12.1** |
 
 **Long-sentence errors: BLEU by source length**
 
 | Source length | n | Seq2Seq | Attention |
 |---|---:|---:|---:|
-| 1–10 words | 1,066 | 7.0 | **15.5** |
-| 11–15 words | 1,291 | 3.3 | **9.7** |
-| 16–20 words | 1,416 | 2.6 | **7.3** |
-| 21–25 words | 1,227 | 1.9 | **7.0** |
+| 1–10 words | 1,164 | 11.9 | **19.5** |
+| 11–15 words | 1,312 | 5.9 | **11.8** |
+| 16–20 words | 1,413 | 4.4 | **9.8** |
+| 21–25 words | 1,111 | 3.2 | **9.6** |
 
 ![BLEU by length](../results/figures/bleu_by_length.png)
 
@@ -225,64 +271,60 @@ Examples for each category are in [`results/error_analysis.md`](../results/error
 
 ### 4.2 Discussion of errors
 * **Long sentences.** The baseline loses 73 % of its short-sentence BLEU on 21–25-word sentences
-  (7.0 → 1.9); the attention model loses 55 % (15.5 → 7.0). This is the fixed-length bottleneck:
-  a 256-dim vector cannot hold a 25-word sentence, while attention can look back at any source word.
-* **Missing words / under-translation.** The baseline tends to produce short, generic sentences, e.g.
-  *"what are some factors that promote this unity?"* → *"ይህ ሲባል ምን ማለት ነው?"* ("What does this mean?").
-  It forgets the content and keeps only the sentence type. 27 % of its outputs are too short.
-  The attention model's length ratio is 1.01.
-* **Repeated words / over-translation.** This is the main weakness of the attention model (24 % of outputs).
-  Without a coverage mechanism, attention can return to the same source word several times
-  (*"ይሆዋ፣ ይሆዋ፣ ይሆዋ ትህትናን፣ ትህትናን …"*). For unfamiliar input it can fall into a loop
-  (*"ሪፖርቱ ሪፖርት ሪፖርት ፕሬድ …"* for the Peru sentence). Remedies: coverage/input feeding,
-  beam search with a repetition penalty, and longer training.
-* **Morphology.** 4–6 % of output words have the right stem but the wrong affix, e.g. *ምድርንን*
-  (doubled object marker) or the wrong person or gender on the verb. The attention model's higher
-  rate here partly reflects the fact that it produces more *correct stems* in the first place.
-* **Word order.** Both models learned the SOV structure well: 94 % pair-wise order agreement on the
-  words they get right. Order errors are not the main problem; lexical and morphological errors are.
-* **Named entities & numbers.** Attention copies names and numbers far better. The baseline "remembers"
-  that a verse reference exists but invents the numbers (*psalm 100:5 → 1 ቆሮንቶስ 00:10*,
-  *songs 100, 87 → 10, 70*). The attention model attends straight to the digit tokens (93.6 % correct).
-  Rare names (Klaus, Tychicus) are still often wrong.
-* **Unknown / rare words and domain shift.** Sentences with rare words score far lower for both models.
-  Everyday sentences outside the religious domain (*university, cooking dinner*) are pulled towards
-  frequent corpus phrases: *"I am going to the university"* → *"እኔ ደግሞ በስሜት ቆየሁ"*.
-  This is the most important practical limitation of the demo, and it comes from the training data,
-  not from the architecture.
-* **Noisy references.** Some test references are misaligned (row 1 above, or the Qur'an verses with
-  bracketed glosses), which caps achievable BLEU for any model.
+  (11.9 → 3.2); the attention model loses 51 % (19.5 → 9.6). This is the fixed-length bottleneck: a 256-dim
+  vector cannot hold a 25-word sentence, while attention can look back at any source word.
+* **Missing words / under-translation.** This is the baseline's main failure: 40 % of its outputs are too
+  short. It keeps the sentence type and drops content, e.g. *"if it did, could we protect ourselves?"* →
+  *"እንዲህ ማድረግ የምንችለው እንዴት ነው?"* ("How can we do this?"). Beam search makes this slightly worse for
+  both models, because beam search tends to prefer short outputs even with length normalization.
+* **Repeated words / over-translation.** With greedy decoding 16–18 % of outputs contain a repetition
+  loop. Beam search with 3-gram blocking reduces this to 6–8 %. The remaining cases are mostly repeated
+  names (*"ፕሮፌሰርና ፕሮፌሰር ፕሮፌሰር"*), where attention returns to the same source word several times.
+  A coverage mechanism would address this.
+* **Morphology.** 4–6 % of output words have the right stem but the wrong affix: wrong tense (*ሄድኩ*
+  "I went" for "I am going"), wrong person, gender or number, or a wrong imperative (*አቋርጡ*). The attention
+  model's higher rate partly reflects that it gets more *stems* right in the first place.
+* **Word order.** Both models learned SOV order well: 95 % pair-wise order agreement on the words they get
+  right. Order errors are not the main problem; lexical and morphological errors are.
+* **Named entities & numbers.** Attention copies numbers almost perfectly (96.6 % vs 70.8 %) and names more
+  reliably. The baseline remembers that a verse reference exists but often invents the digits
+  (*ex. 1:8, 9, 13, 14 → ዘጸ 18፥ 1, 15, 38*). Rare names (Shane, Kelvin) are still often dropped or garbled.
+* **Unknown / rare words and domain.** Sentences with rare words score about 3× lower for both models.
+  Adding habtew fixed several everyday words (*university → ዩኒቨርሲቲ*), but household vocabulary such as
+  *cooking dinner* or *garden* is still rare, and the model falls back to religious phrases
+  (*garden → ገነት*, "paradise").
+* **Negation and polarity.** *"i stopped worrying"* → *"መጨነቅ ጀመርኩ"* ("I started worrying"): a small
+  lexical error that reverses the meaning, which BLEU hardly penalizes.
+* **Noisy references.** Some test references are misaligned (the "professor" row above, and Qur'an verses
+  with bracketed glosses). This caps achievable BLEU for any model.
 
 ### 4.3 Attention visualisations
-The heatmaps are in `results/figures/attention_*.png` (rows = generated Amharic subwords, columns =
-English subwords, brighter = more weight).
-
-![attention 2](../results/figures/attention_2.png)
-
-**"Jesus taught his disciples to love one another."** → *ኢየሱስ ደቀ መዛሙርቱ እርስ በርሳቸው እንዲወዱ አስተምሯቸዋል።*
-The alignment is clean and shows the reordering needed for **SOV** Amharic. *ኢየሱስ* attends to
-*jesus*, and *ደቀ መዛሙርቱ* to *disciples*. *እርስ በርሳቸው* ("one another") attends to *one/another*,
-and *እንዲወዱ* ("that they love") to *to love*. The main verb *አስተምሯቸዋል* ("he taught them") is
-generated **last**, yet attends back to *taught* (the 2nd source word): attention has learned to jump
-backwards for the sentence-final Amharic verb. The final `።` and `</s>` attend to the English period.
-
-![attention 5](../results/figures/attention_5.png)
-
-**"We must read the Bible every day."** → *መጽሀፍ ቅዱስን በየእለቱ ማንበብ ይኖርብናል።*
-The order is almost the reverse of the English: *Bible → every day → read → must*. The object
-*መጽሀፍ ቅዱስን* attends to *the bible*, *በየእለቱ* to *every day*, and *ማንበብ* to *read*. The modal
-verb *ይኖርብናል* ("we must"), which Amharic puts at the end, attends sharply to *must*. The subject
-*we* has no separate Amharic word. It shows up as the suffix *-ናል* in *ይኖርብናል*, which is why no row
-attends to *we* strongly.
+The heatmaps are in `results/figures/attention_*.png` (rows = generated Amharic subwords, columns = English
+subwords, brighter = more weight).
 
 ![attention 1](../results/figures/attention_1.png)
 
-**"I am going to the university."** (a failure case) → *እኔ ደግሞ በስሜት ቆየሁ።*
-*university* is rare in the corpus. The attention for the middle of the output is **diffuse**, spread
-across *to / the / university / .*, and the model fills that part with a frequent phrase (*በስሜት*).
-Even so, the verb's first-person suffix *ሁ* attends clearly to *i*, so the model still marks
-subject agreement on the verb correctly. This shows the attention mechanism works, and the error is
-a gap in vocabulary and domain.
+**"I am going to the university."** → *ወደ ዩኒቨርሲቲው ሄድኩ።* (version 1 failed on this sentence.)
+The first output word *ወደ* ("to") attends mostly to *university* and *to*. *ዩኒቨርሲቲ* attends sharply to
+*university*, and the definite suffix *ው* to *the*. The verb stem *ሄድ* ("go") attends to *going*, and the
+first-person suffix *ኩ* attends strongly to ***i***. The model has learned that the English subject pronoun
+becomes a verb suffix in Amharic. The only error is tense (past instead of progressive), a morphology error.
+
+![attention 2](../results/figures/attention_2.png)
+
+**"Jesus taught his disciples to love one another."** → *ኢየሱስ ደቀ መዛሙርቱ እርስ በርስ እንዲወደዱ አስተምሯቸዋል።*
+The alignment is clean and shows the reordering needed for **SOV** Amharic: *ኢየሱስ* → *jesus*,
+*ደቀ መዛሙርቱ* → *his disciples*, *እርስ በርስ* → *one another*, *እንዲወደዱ* ("that they love each other")
+→ *to love*. The main verb *አስተምሯቸዋል* ("he taught them") is generated **last** but attends back to
+*taught*, the second source word. The final `።` and `</s>` attend to the English period.
+
+![attention 5](../results/figures/attention_5.png)
+
+**"We must read the Bible every day."** → *በየእለቱ መጽሀፍ ቅዱስን ማንበብ ይኖርብናል።*
+The output starts with the time adverb *በየእለቱ* ("every day"), which attends to *day / every*. The object
+*መጽሀፍ ቅዱስን* attends to *the bible*, *ማንበብ* to *read*, and the sentence-final modal verb *ይኖርብናል*
+("we must") very sharply to *must*. The subject *we* has no word of its own; it appears as the suffix
+*-ናል*, so no row attends strongly to *we*.
 
 ---
 
@@ -290,23 +332,19 @@ a gap in vocabulary and domain.
 
 | Component | What it does |
 |---|---|
-| `src/translate.py` — `Translator` | inference pipeline: normalize → SentencePiece → encoder → greedy decoder → SentencePiece decode → Amharic detokenization |
-| `app.py` — **FastAPI** | `POST /translate` `{"text": "...", "model": "attention" \| "seq2seq"}` → `{"translation": "...", "model": "..."}`; `POST /translate/details` (tokens, attention matrix, latency); `GET /health`; OpenAPI docs at `/docs`; input validation (empty text / > 500 characters → HTTP 400) |
+| `src/translate.py` — `Translator` | inference pipeline: normalize → SentencePiece → encoder → beam-search decoder (or greedy) → SentencePiece decode → Amharic detokenization |
+| `app.py` — **FastAPI** | `POST /translate` `{"text": "...", "model": "attention" \| "seq2seq", "decoding": "beam" \| "greedy"}` → `{"translation": "...", "model": "..."}`; `POST /translate/details` (tokens, attention matrix, latency); `GET /health`; OpenAPI docs at `/docs`; input validation (empty text / > 500 characters → HTTP 400) |
 | `app.py` — **Gradio** UI at `/` | text box, examples, both models' translations side by side, live attention heatmap |
-| `Dockerfile` | self-contained image with the trained models, tokenizers, dependencies and inference code; runs on Hugging Face Spaces, Render, Railway, Fly.io or locally |
-| `web/` — **public browser demo** | the models are exported to ONNX (`src/export_onnx.py`; embedding and output matrices int8-quantized, 13 MB per model) and run in the visitor's browser with ONNX Runtime Web. The tokenizer is re-implemented in JavaScript and verified to match Python on 3,009 + 1,200 test cases (`tests/test_web_parity.py`). Published to GitHub Pages by `.github/workflows/pages.yml` |
+| `Dockerfile` | self-contained image with the trained models, tokenizers, dependencies and inference code (Hugging Face Spaces, Render, Railway, Fly.io, local) |
+| `web/` — **public browser demo** | models exported to ONNX (`src/export_onnx.py`; embedding and output matrices int8-quantized, 13 MB per model) and run in the visitor's browser with ONNX Runtime Web. Tokenizer (`web/tokenizer.js`) and beam search (`web/beam.js`) are re-implemented in JavaScript and verified against Python: 3,009 + 1,200 tokenizer cases (`tests/test_web_parity.py`) and 50 beam-search cases. Published to GitHub Pages by `.github/workflows/pages.yml` |
 
 **Live demo:** https://esraprojects.github.io/deep_learning-amharic_translation-using-seq2seq/
-
-Quantization check (300 test sentences): the attention model scores 6.92 BLEU in ONNX-int8 vs 7.01 in
-PyTorch-fp32. For seq2seq the scores are identical (2.66). Without quantization, the ONNX graphs
-reproduce the PyTorch outputs exactly (attention weights match to 3·10⁻⁸).
 
 Example:
 ```bash
 $ curl -X POST localhost:7860/translate -H "Content-Type: application/json" \
-       -d '{"text": "We must read the Bible every day."}'
-{"translation":"መጽሀፍ ቅዱስን በየእለቱ ማንበብ ይኖርብናል።","model":"attention"}
+       -d '{"text": "I am going to the university."}'
+{"translation":"ወደ ዩኒቨርሲቲው ሄድኩ።","model":"attention"}
 ```
 
 ---
@@ -314,23 +352,26 @@ $ curl -X POST localhost:7860/translate -H "Content-Type: application/json" \
 ## 6. Conclusion and future work
 
 With the same encoder, data, training budget and almost the same number of parameters, **adding
-attention nearly triples BLEU (2.97 → 8.57) and raises chrF by 7.3 points**. The gains are largest
+attention more than doubles BLEU (5.21 → 11.27) and raises chrF by 9.3 points**. The gains are largest
 exactly where theory predicts: long sentences, faithful copying of numbers and names, and avoiding
-under-translation. The remaining errors are mostly repetition, wrong Amharic inflections and
-out-of-domain vocabulary.
+under-translation.
+
+Adding general-domain data, training 2.8× longer and using tuned beam search together improved the attention
+model from 8.57 to 11.27 BLEU, and made everyday sentences such as *"I am going to the university"*
+translatable. The remaining errors are wrong Amharic inflections (especially tense), rare household
+vocabulary, residual repetition and under-translation.
 
 Future work, most promising first:
-1. Train longer or on a GPU (both curves were still falling).
-2. Beam search with length normalization and a repetition penalty.
-3. Coverage / input feeding against repetition.
-4. Add more general-domain data (e.g. the news portion of `habtew/english-amharic-translation`, once its
-   license is clarified).
-5. A Transformer baseline for comparison.
+1. GPU training for more epochs and a larger hidden size (both losses were still falling).
+2. Coverage / input feeding against repetition and dropped content.
+3. More general-domain parallel data, e.g. Tatoeba and news.
+4. A Transformer baseline for comparison.
 
 ## References
 * Sutskever, Vinyals, Le (2014). *Sequence to Sequence Learning with Neural Networks.*
 * Bahdanau, Cho, Bengio (2015). *Neural Machine Translation by Jointly Learning to Align and Translate.*
 * Luong, Pham, Manning (2015). *Effective Approaches to Attention-based Neural Machine Translation.*
+* Wu et al. (2016). *Google's Neural Machine Translation System* (length normalization).
 * Kudo (2018). *Subword Regularization* / SentencePiece.
 * Tiedemann (2012). *Parallel Data, Tools and Interfaces in OPUS.* · Gowda et al. (2021) *Many-to-English MT (MT560).*
 * Post (2018). *A Call for Clarity in Reporting BLEU Scores* (sacrebleu); Popović (2015) *chrF.*

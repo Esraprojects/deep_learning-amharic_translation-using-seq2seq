@@ -6,147 +6,147 @@
 
 ### repeated
 
-- **SRC:** as you engage in this work , you have the opportunity to " save both yourself and those who listen to you . "  
-  **REF:** በዚህ ስራ ላይ መካፈልህ ' ራስህንና የሚሰሙህን ለማዳን ' የሚያስችል አጋጣሚ ያስገኝልሀል።  
-  **HYP:** በዚህ መንገድ " [] " ["] " የሚለውን ቃል ምክሩን ቀጥሉ።
-- **SRC:** i truly feel like the psalmist who sang : " blessed be jehovah , who daily carries the load for us . "  
-  **REF:** እንደሚከተለው ሲል የዘመረው መዝሙራዊ አይነት ስሜት ይሰማኛል: - " በየቀኑ ሸክማችንን የሚሸከምልን ይሆዋ የተባረከ ይሁን። "  
-  **HYP:** መዝሙራዊው " ይሆዋ ሆይ፣ ["] " ስለ ይሆዋ ያስባል፤ ምክንያቱም ስለ ይሆዋ ያስባል።
-- **SRC:** he came to love the god he learned about , and that knowledge helped him to build faith .  
-  **REF:** ስለ አምላክ የተማረው ነገር እሱን እንዲወደው ያደረገ ሲሆን እውቀቱ ደግሞ እምነት እንዲያዳብር ረድቶታል።  
-  **HYP:** አምላክ ስለ እሱ እውነቱን ማወቅና ስለ እሱ እውነቱን ለማወቅ የሚያስችል አጋጣሚ ሰጥቷል።
+- **SRC:** or a young brother or sister who has athletic ability may find that recruiters try to entice him or her into a sports career .  
+  **REF:** ወይም ደግሞ በአትሌቲክስ ዘርፍ ወጣቶችን የሚመለምሉ ሰዎች በዚህ ረገድ ጥሩ ችሎታ ያለውን አንድ ክርስቲያን ወጣት ወደ ስፖርቱ አለም እንዲገባ ሊያግባቡት ይሞክሩ ይሆናል።  
+  **HYP:** ወይም አንድ ወንድም ወይም አንድ ወጣት ወይም ምስጢር ወይም በትምህርት ወይም በህብረተሰቡ ላይ ጉዳት ሊያስከትል ይችላል።
+- **SRC:** yes , what spiritual riches jesus packed into his model prayer !  
+  **REF:** በእርግጥም ኢየሱስ ያስተማረው የጸሎት ናሙና በርካታ መንፈሳዊ እንቁዎችን የያዘ ነው!  
+  **HYP:** አዎን፣ ኢየሱስ፣ ኢየሱስ ወደ ሰማይ ጸልይ!
+- **SRC:** these include the promised " new heavens and a new earth . "  
+  **REF:** ይህም ቃል የተገባልንን " አዲስ ሰማይና አዲስ ምድር " ይጨምራል።  
+  **HYP:** እነዚህ ቃላት " አዲስ ቃል ኪዳን " እና " አዲስ ኪዳን " ነው።
 
 ### missing
 
-- **SRC:** and as it was in the days of noe , so shall it be also in the days of the son of man .  
-  **REF:** በኖህ ዘመንም እንደ ሆነ፥ በሰው ልጅ ዘመን ደግሞ እንዲሁ ይሆናል።  
-  **HYP:** በንጉስም ዘመን በህልምና በስሜት ላይ ነው።
-- **SRC:** so they differed with one another in their task , and secretly conferred .  
-  **REF:** (ድግምተኞቹ) በመካከላቸውም ነገራቸውን ተጨቃጨቁ። ውይይትንም ደበቁ።  
-  **HYP:** ስለዚህም በወንዶች ላይ ሰፈሩ።
-- **SRC:** " when our son called and told me about a shooting at school , i couldn ' t believe it , " recalls heike .  
-  **REF:** ሄይከ የተባለች አንዲት ሴት እንዲህ ብላለች፦ " ልጃችን ደውሎ በትምህርት ቤት ውስጥ እየተፈጸመ ስላለው ግድያ ሲነግረኝ ማመን አልቻልኩም።  
-  **HYP:** " ቤተሰቦቼን ስለ ምስጢን ምግባራችንን ውደድ " በማለት ተናግሯል።
+- **SRC:** besides , they claimed that they had neither the facilities nor the manpower to provide an alternative physical education program .  
+  **REF:** ከዚህም በላይ አማራጭ የአካል ማጎልመሻ ትምህርት ለማዘጋጀት የሚረዱ መሳሪያዎችም ሆኑ የሰው ሀይል የለንም አለ።  
+  **HYP:** ከዚህም በላይ ቲኦክራሲያዊ ትምህርት ቤቶችን የሚጠቀሙበት ጊዜ አለ።
+- **SRC:** the dread of you makes my body tremble ;  
+  **REF:** አንተን እጅግ ከመፍራቴ የተነሳ ሰውነቴ ይንቀጠቀጣል፤  
+  **HYP:** እጆቻችሁን እንደ ገደለኝ፤
+- **SRC:** as told by george warienchuck  
+  **REF:** ጆርጅ ዎረንቸክ እንደተናገረው  
+  **HYP:** ቲንደል፦
 
 ### additional
 
-- **SRC:** my wife and i were violent toward each other , largely because we harbored feelings of jealousy .  
-  **REF:** እኔና ባለቤቴ ስለምንቀናና ብዙ ጊዜ እንጣላ ነበር።  
-  **HYP:** እኔና ባለቤቴና ጎረቤቶቻችንን ከወንዶች ጋር በተያያዘ በምስጢር ላይ ተጽእኖ ሊያሳድር ይችላል።
-- **SRC:** you will not find any bible text that uses the expression " immortal soul "  
-  **REF:** መጽሀፍ ቅዱስ ውስጥ " የማትሞት ነፍስ " የሚል አገላለጽ አይገኝም  
-  **HYP:** መጽሀፍ ቅዱስ " ነፍስ " የሚለው ቃል " ነፍስ " የሚለው ቃል " ነፍስ "
-- **SRC:** it is attainable .  
-  **REF:** ይህንን ማድረግ ይቻላል።  
-  **HYP:** ይህ ደግሞ በጣም አስፈላጊ ነው።
+- **SRC:** obviously , the world ' s religions have not been immune from satan ' s influence .  
+  **REF:** የአለም ሀይማኖቶች ከሰይጣን ተጽእኖ ነጻ አይደሉም።  
+  **HYP:** በአለም ዙሪያ ያሉ ሀይማኖቶች በአለም ላይ ተጽእኖ የሚያሳድሩት ለምንድን ነው?
+- **SRC:** my wife and i look at each other .  
+  **REF:** እኔና ባለቤቴ ተያየን።  
+  **HYP:** ባለቤቴና ባለቤቴ እርስ በርስ ተነጋገሩ።
+- **SRC:** moreover , jehovah ' s goodness extends " to all . "  
+  **REF:** ከዚህም በላይ ይሆዋ ጥሩነቱን የሚያሳየው " ለሁሉም " ነው።  
+  **HYP:** ከዚህም በላይ ይሆዋ " መልካም የሆነውን ነገር ሁሉ [" NW] " በማለት ተናግሯል።
 
 ### word order
 
-- **SRC:** if someone receives a theocratic assignment or a spiritual blessing , others in the congregation need to guard against envy .  
-  **REF:** አንድ ሰው ቲኦክራሲያዊ ስራ ወይም መንፈሳዊ በረከት ሲያገኝ ሌሎች በጉባኤው ውስጥ ያሉ ሰዎች እንዳይቀኑ መጠንቀቅ ያስፈልጋቸዋል።  
-  **HYP:** አንድ ክርስቲያን በጉባኤ ውስጥ ያሉ መንፈሳዊ ግቦችን የሚጠብቁ ከሆነ በመንፈሳዊ ወይም በመንፈሳዊ እንቅስቃሴዎች ላይ ተጽእኖ ሊያሳድር ይችላል።
-- **SRC:** furthermore , they must be baptized christians who are " born again , " begotten by god ' s holy spirit .  
-  **REF:** ከዚህም በላይ ደግሞ በአምላክ ቅዱስ መንፈስ ' ዳግመኛ የተወለዱ ' የተጠመቁ ክርስቲያኖች መሆን አለባቸው።  
-  **HYP:** ከዚህም በተጨማሪ ክርስቲያኖች ' የአምላክ መንፈስ ' ማለትም በመንፈስ ቅዱስ ውስጥ እንዲገቡ ይረዳቸዋል።
-- **SRC:** the result often is that one will procrastinate in making a decision , putting things off until it is too late .  
-  **REF:** ብዙውን ጊዜ አንድ ሰው ውሳኔ ከማድረግ ይልቅ ዛሬ ነገ እያለ አንድን ጉዳይ ማጓተቱ ወደ ባሰ ችግር ውስጥ እንዲገባ ሊያደርገው ይችላል።  
-  **HYP:** ይህ ደግሞ አንድ ሰው በምግብበት ጊዜ ላይ የሚያጋጥምው ነገር ነው።
+- **SRC:** hence , none of his servants need to be reluctant to accept help from those who are moved by jehovah to give such assistance .  
+  **REF:** ይሆዋ አንዳንዶች ለሌሎች እርዳታ እንዲሰጡ ሊያነሳሳቸው ይችላል፤ በመሆኑም ከአገልጋዮቹ መካከል ማናቸውም ቢሆኑ እንዲህ ያለውን ድጋፍ ለመቀበል ማቅማማት የለባቸውም።  
+  **HYP:** በመሆኑም ይሆዋ አገልጋዮቹን ለመርዳት የሚያስችላቸውን እርዳታ ለማግኘት ጥረት ማድረግ የሚችሉት እንዴት ነው?
+- **SRC:** soon god ' s kingdom will be the only government ruling the earth .  
+  **REF:** በቅርቡ በምድር ላይ የሚገዛው የአምላክ መንግስት ብቻ ይሆናል።  
+  **HYP:** በቅርቡ የአምላክ መንግስት በቅርቡ በምድር ላይ ነው።
+- **SRC:** many who have had the privilege of conducting progressive bible studies will tell you that few things are more rewarding .  
+  **REF:** ጥሩ እድገት የሚያደርጉ የመጽሀፍ ቅዱስ ጥናቶችን የመምራት አጋጣሚ ያገኙ በርካታ ወንድሞችና እህቶች በዚህ ሀሳብ ይስማማሉ።  
+  **HYP:** በርካታ የመጽሀፍ ቅዱስ ጥናቶችን በማገልገሉ በጣም ብዙ ሰዎች በጣም ብዙ ናቸው።
 
 ### named entity
 
-- **SRC:** furthermore , satan ' s earthly agents have persecuted servants of god to the point of death , even as they did jesus .  
-  **REF:** ይህ መሆኑ ግን ሰይጣን የፈለገውን ሁሉ ለመግደል የሚያስችል ሀይል እንዳለው አያመለክትም።  
-  **HYP:** ከዚህም በተጨማሪ ኢየሱስ ክርስቶስ የአምላክ መንግስት፣ የሰው ልጆችን ጨምሮ ሰዎች፣ የዲያብሎስን ህይወት እንዲያስወግድ አድርጓል።
-- **SRC:** israel ' s older men initially believed moses and aaron .  
-  **REF:** የእስራኤል ሽማግሌዎች መጀመሪያ ላይ ሙሴና አሮንን አምነው ተቀበሏቸው።  
-  **HYP:** የእስራኤልም ልጆችም በያእቆብም ላይ ይከራከሩ ነበር።
-- **SRC:** when adam and eve rebelled against god , they adopted the standards of the selfish traitor satan and chose him as their spiritual father .  
-  **REF:** አዳምና ሄዋን በአምላክ ላይ ሲያምጹ ራስ ወዳድ የሆነውን የከሀዲውን የሰይጣንን መስፈርቶች በመከተል እርሱ መንፈሳዊ አባታቸው እንዲሆን መርጠዋል።  
-  **HYP:** አዳምና ሄዋንን ጨምሮ ይሆዋ አምላክ የሰጣቸውን መንፈሳዊና መንፈሳዊ ምግብ እንዲሰጣቸውና እንዲታዘዙት ይፈልጋል።
+- **SRC:** gaffar , who was born in turkey , was disturbed by the idea of a vengeful god , as taught by his religion .  
+  **REF:** በቱርክ የተወለደው ጃፋር ሀይማኖቱ በሚያስተምረው ' አምላክ ተበቃይ ነው ' በሚለው ትምህርት ይረበሽ ነበር።  
+  **HYP:** በ1940ዎቹ አመታት፣ ምስጢር፣ የስምንት ንዴት፣ ድምጾቹን በወንጌላዊነትና በህጻናዊነት ላይ የተመሰረተ ነበር።
+- **SRC:** obviously , the world ' s religions have not been immune from satan ' s influence .  
+  **REF:** የአለም ሀይማኖቶች ከሰይጣን ተጽእኖ ነጻ አይደሉም።  
+  **HYP:** በአለም ዙሪያ ያሉ ሀይማኖቶች በአለም ላይ ተጽእኖ የሚያሳድሩት ለምንድን ነው?
+- **SRC:** and moses and aaron went and gathered together all the elders of the children of israel :  
+  **REF:** ሙሴና አሮንም ሄዱ የእስራኤልንም ልጆች ሽማግሌዎች ሁሉ ሰበሰቡ።  
+  **HYP:** ሙሴም አሮንንና አሮንን እንዲህ አላቸው፥
 
 ### rare
 
-- **SRC:** and as it was in the days of noe , so shall it be also in the days of the son of man .  
-  **REF:** በኖህ ዘመንም እንደ ሆነ፥ በሰው ልጅ ዘመን ደግሞ እንዲሁ ይሆናል።  
-  **HYP:** በንጉስም ዘመን በህልምና በስሜት ላይ ነው።
-- **SRC:** " when our son called and told me about a shooting at school , i couldn ' t believe it , " recalls heike .  
-  **REF:** ሄይከ የተባለች አንዲት ሴት እንዲህ ብላለች፦ " ልጃችን ደውሎ በትምህርት ቤት ውስጥ እየተፈጸመ ስላለው ግድያ ሲነግረኝ ማመን አልቻልኩም።  
-  **HYP:** " ቤተሰቦቼን ስለ ምስጢን ምግባራችንን ውደድ " በማለት ተናግሯል።
-- **SRC:** i was born in ilocos norte , philippines , on december 10 , 1968 , the seventh of ten children .  
-  **REF:** ታህሳስ 10, 1968 በኢሎኮስ ኖርቲ፣ ፊሊፒንስ ተወለድኩ፤ በቤተሰባችን ውስጥ ካሉት አስር ልጆች መካከል እኔ ሰባተኛ ነበርኩ።  
-  **HYP:** መስከረም 1966 180 አመት ሲሆነኝ 18 አመት ልጅ ሳለሁ ሬንስስ።
+- **SRC:** besides , they claimed that they had neither the facilities nor the manpower to provide an alternative physical education program .  
+  **REF:** ከዚህም በላይ አማራጭ የአካል ማጎልመሻ ትምህርት ለማዘጋጀት የሚረዱ መሳሪያዎችም ሆኑ የሰው ሀይል የለንም አለ።  
+  **HYP:** ከዚህም በላይ ቲኦክራሲያዊ ትምህርት ቤቶችን የሚጠቀሙበት ጊዜ አለ።
+- **SRC:** as told by george warienchuck  
+  **REF:** ጆርጅ ዎረንቸክ እንደተናገረው  
+  **HYP:** ቲንደል፦
+- **SRC:** or a young brother or sister who has athletic ability may find that recruiters try to entice him or her into a sports career .  
+  **REF:** ወይም ደግሞ በአትሌቲክስ ዘርፍ ወጣቶችን የሚመለምሉ ሰዎች በዚህ ረገድ ጥሩ ችሎታ ያለውን አንድ ክርስቲያን ወጣት ወደ ስፖርቱ አለም እንዲገባ ሊያግባቡት ይሞክሩ ይሆናል።  
+  **HYP:** ወይም አንድ ወንድም ወይም አንድ ወጣት ወይም ምስጢር ወይም በትምህርት ወይም በህብረተሰቡ ላይ ጉዳት ሊያስከትል ይችላል።
 
 ## Attention Seq2Seq + LSTM
 
 
 ### repeated
 
-- **SRC:** my conscience troubled me more and more .  
-  **REF:** በዚህ ጊዜ ለውትድርና ተጠራሁ።  
-  **HYP:** ህሊናዬ ይበልጥ ይበልጥ ተነካኝ።
-- **SRC:** and as it was in the days of noe , so shall it be also in the days of the son of man .  
-  **REF:** በኖህ ዘመንም እንደ ሆነ፥ በሰው ልጅ ዘመን ደግሞ እንዲሁ ይሆናል።  
-  **HYP:** በምእራም ዘመንም ሁሉ በህልም ዘመን፥ በወንጌልም ዘመን፥
-- **SRC:** so they differed with one another in their task , and secretly conferred .  
-  **REF:** (ድግምተኞቹ) በመካከላቸውም ነገራቸውን ተጨቃጨቁ። ውይይትንም ደበቁ።  
-  **HYP:** በ1950ዎቹ አመታት በ1950ዎቹ አመታት ሰፈሩ።
+- **SRC:** " he ' s in heaven , " the commander in chief told the family of one fallen marine in a private moment .  
+  **REF:** አንድ ከፍተኛ የሰራዊት አዛዥ በውጊያ ላይ ከሞተ አንድ የባህር ሀይል አባል ቤተሰብ ጋር ሲነጋገሩ " ገነት ገብቷል " ሲሉ መደመጣቸው ተሰማ።  
+  **HYP:** " በሰማይ ያለው ንጉስ በሰማይ ያለው " በማለት ተናግሯል።
+- **SRC:** or a young brother or sister who has athletic ability may find that recruiters try to entice him or her into a sports career .  
+  **REF:** ወይም ደግሞ በአትሌቲክስ ዘርፍ ወጣቶችን የሚመለምሉ ሰዎች በዚህ ረገድ ጥሩ ችሎታ ያለውን አንድ ክርስቲያን ወጣት ወደ ስፖርቱ አለም እንዲገባ ሊያግባቡት ይሞክሩ ይሆናል።  
+  **HYP:** ወይም ደግሞ አንድ ወጣት ወይም አንዲት ወጣት አንድ ወጣት ወደ ፖርቱጋል ሄድን።
+- **SRC:** in recent decades , batik has gained greater popularity and has become a symbol of indonesian national identity .  
+  **REF:** ብዙዎቹ የኢንዶኔዥያ ግዛቶች የራሳቸው የሆነ የአቀላለምና ንድፍ የማውጣት ዘዴ አላቸው።  
+  **HYP:** ከቅርብ አስርተ አስርተ አመታት ወዲህ ምስጢራቸውን በጣም ውድ በሆነ መንገድ ተካፍሏል።
 
 ### missing
 
-- **SRC:** so they differed with one another in their task , and secretly conferred .  
-  **REF:** (ድግምተኞቹ) በመካከላቸውም ነገራቸውን ተጨቃጨቁ። ውይይትንም ደበቁ።  
-  **HYP:** በ1950ዎቹ አመታት በ1950ዎቹ አመታት ሰፈሩ።
-- **SRC:** they decided to disobey god .  
-  **REF:** አዳምና ሄዋን ይሆዋን ላለመታዘዝ ወሰኑ።  
-  **HYP:** አምላክን መፍራት ጀመሩ።
-- **SRC:** to whom should youngsters turn to find accurate knowledge that will safeguard them ?  
-  **REF:** ወጣቶች ከአደጋ የሚጠብቃቸውን ትክክለኛ እውቀት ለማግኘት ወደ ማን ዞር ማለት አለባቸው?  
-  **HYP:** ሰዎች የሚያጋጥሟቸውን እውቀት ማወቅ ያለባቸው እነማን ናቸው?
+- **SRC:** the dread of you makes my body tremble ;  
+  **REF:** አንተን እጅግ ከመፍራቴ የተነሳ ሰውነቴ ይንቀጠቀጣል፤  
+  **HYP:** የህልም እንጀራዬን ትጠብቃለህ፤
+- **SRC:** " he ' s in heaven , " the commander in chief told the family of one fallen marine in a private moment .  
+  **REF:** አንድ ከፍተኛ የሰራዊት አዛዥ በውጊያ ላይ ከሞተ አንድ የባህር ሀይል አባል ቤተሰብ ጋር ሲነጋገሩ " ገነት ገብቷል " ሲሉ መደመጣቸው ተሰማ።  
+  **HYP:** " በሰማይ ያለው ንጉስ በሰማይ ያለው " በማለት ተናግሯል።
+- **SRC:** or a young brother or sister who has athletic ability may find that recruiters try to entice him or her into a sports career .  
+  **REF:** ወይም ደግሞ በአትሌቲክስ ዘርፍ ወጣቶችን የሚመለምሉ ሰዎች በዚህ ረገድ ጥሩ ችሎታ ያለውን አንድ ክርስቲያን ወጣት ወደ ስፖርቱ አለም እንዲገባ ሊያግባቡት ይሞክሩ ይሆናል።  
+  **HYP:** ወይም ደግሞ አንድ ወጣት ወይም አንዲት ወጣት አንድ ወጣት ወደ ፖርቱጋል ሄድን።
 
 ### additional
 
-- **SRC:** notify a confidant , and if possible , call him before each dose is taken .  
-  **REF:** እያንዳንዱን የምትወስደውን መድሀኒት መጠን መዝግበህ ያዝ።  
-  **HYP:** ምእራብና ቢሻም (ቢል)። ከወንዶችም በፊት ከፊተኞቹም (ከቁርአን) አቀናው።
-- **SRC:** ( the new testament of our lord jesus christ , translated from greek by reijnier rooleeuw , m . d . )  
-  **REF:** (የጌታችን የኢየሱስ ክርስቶስ አዲስ ኪዳን በሬኒር ሮሌኦ ኤም ዲ ከግሪክኛ የተተረጎመ)  
-  **HYP:** (ኒውንያ 19ን ትርጉም) " የጌታችን " የሚለው ስም ከጻፍነው የእብራይስጥ ክርስቶስ ጋር በተያያዘ ነው።
-- **SRC:** my wife and i were violent toward each other , largely because we harbored feelings of jealousy .  
-  **REF:** እኔና ባለቤቴ ስለምንቀናና ብዙ ጊዜ እንጣላ ነበር።  
-  **HYP:** ባለቤቴም ሆነ እኔ ደግሞ ቅናትን በመቀበል ምክንያት ምኞቴን ጠላታችንን ተቀበልኩ።
+- **SRC:** as told by george warienchuck  
+  **REF:** ጆርጅ ዎረንቸክ እንደተናገረው  
+  **HYP:** በስፔይን ሪፑብሊክ ንገረን እንደተናገረው
+- **SRC:** obviously , the world ' s religions have not been immune from satan ' s influence .  
+  **REF:** የአለም ሀይማኖቶች ከሰይጣን ተጽእኖ ነጻ አይደሉም።  
+  **HYP:** እርግጥ ነው፣ የአለም ሀይማኖቶች የሰይጣንን ተጽእኖ መቋቋም አልቻሉም።
+- **SRC:** " he is not here , " said the angel , " for he was raised up . "  
+  **REF:** አዎ፣ ኢየሱስ ህያው ሆኗል!  
+  **HYP:** መልአኩ " እዚህ ላይ ተገለጠለት " በማለት መልአኩ ተናግሯል።
 
 ### word order
 
-- **SRC:** you will not find any bible text that uses the expression " immortal soul "  
-  **REF:** መጽሀፍ ቅዱስ ውስጥ " የማትሞት ነፍስ " የሚል አገላለጽ አይገኝም  
-  **HYP:** " ሞት " የሚለው አገላለጽ " ሞት " የሚለውን ቃል መጽሀፍ ቅዱስ ይናገራል
-- **SRC:** contrary to popular belief , men do not always remarry simply to satisfy their physical or sexual needs .  
-  **REF:** ብዙዎች ካላቸው አስተሳሰብ በተቃራኒ ወንዶች ብዙውን ጊዜ እንደገና የሚያገቡት አካላዊ ፍላጎታቸውን ወይም የጾታ ስሜታቸውን ለማርካት አይደለም።  
-  **HYP:** ሰዎች እንዲህ ያለ እምነት ያላቸው ሰዎች ወይም የጾታ ፍላጎት ያላቸው ሰዎች አካላዊ ፍላጎት እንዳላቸው ይሰማቸዋል።
-- **SRC:** during his 18 years in padua , three children were born to galileo by his mistress , a young venetian woman .  
-  **REF:** በፓዱዋ በኖረባቸው 18 አመታት ቁባቱ ከነበረች ቬኒሲያዊት ሴት ሶስት ልጆች ወልዷል።  
-  **HYP:** በ18 አመት ውስጥ ሶስት ልጆች በ18 አመት እድሜ ላይ ሲገባ የሴት ሴት ልጅ ወለድን።
+- **SRC:** these include the promised " new heavens and a new earth . "  
+  **REF:** ይህም ቃል የተገባልንን " አዲስ ሰማይና አዲስ ምድር " ይጨምራል።  
+  **HYP:** እነዚህ ሰዎች " አዲስ ሰማይና አዲስ ምድር " የሚለውን ቃል ያመለክታል።
+- **SRC:** the answers to those questions will be discussed in the next article .  
+  **REF:** የሚቀጥለው ርእስ የእነዚህን ጥያቄዎች መልስ ይዟል።  
+  **HYP:** የእነዚህ ጥያቄዎች መልስ በሚቀጥለው ርእስ ላይ ይብራራል።
+- **SRC:** only joshua and caleb urged the people not to rebel out of fear , for jehovah would surely be with them .  
+  **REF:** ይሆዋ ከእነርሱ ጋር እንደሚሆን በመተማመን ህዝቡ ከፍርሀት የተነሳ ማመጽ እንደሌለባቸው የተናገሩት ኢያሱና ካሌብ ብቻ ነበሩ።  
+  **HYP:** ኢያሱና ካሌብ፣ ይሆዋ ከእነሱ ጋር እንደሚሆን የረዳቸው ኢያሱ ብቻ ሳይሆን ካሌብና ካሌብ ብቻ ነው።
 
 ### named entity
 
-- **SRC:** ( the new testament of our lord jesus christ , translated from greek by reijnier rooleeuw , m . d . )  
-  **REF:** (የጌታችን የኢየሱስ ክርስቶስ አዲስ ኪዳን በሬኒር ሮሌኦ ኤም ዲ ከግሪክኛ የተተረጎመ)  
-  **HYP:** (ኒውንያ 19ን ትርጉም) " የጌታችን " የሚለው ስም ከጻፍነው የእብራይስጥ ክርስቶስ ጋር በተያያዘ ነው።
-- **SRC:** this touching psalm of david should motivate us to be courageous and optimistic .  
-  **REF:** ይህ ልብን የሚነካ የዳዊት መዝሙር ደፋሮችና ብሩህ የሆነው ጎን የሚታየን እንድንሆን ሊያነሳሳን ይገባል።  
-  **HYP:** ይህ መዝሙር ደፋርና ምክንያታዊ እንድንሆን የሚረዳን እንዴት ነው?
-- **SRC:** quoting jesus , the disciple mark wrote that this work must be done " first , " that is , before the end comes .  
-  **REF:** ደቀ መዝሙሩ ማርቆስ፣ ኢየሱስ የተናገረውን በመጥቀስ ይህ ስራ " አስቀድሞ " ይኸውም መጨረሻው ከመምጣቱ በፊት መሰራት እንዳለበት ጽፏል።  
-  **HYP:** ደቀ መዛሙርቱ ይህን ስራ ከመፈጸም በፊት " በመጀመሪያ " የሚለው ስራ " በመጀመሪያ " መሆን አለበት።
+- **SRC:** gaffar , who was born in turkey , was disturbed by the idea of a vengeful god , as taught by his religion .  
+  **REF:** በቱርክ የተወለደው ጃፋር ሀይማኖቱ በሚያስተምረው ' አምላክ ተበቃይ ነው ' በሚለው ትምህርት ይረበሽ ነበር።  
+  **HYP:** በቤቱ ውስጥ የተወለድኩበት ጊዜ አለ።
+- **SRC:** by way of contrast , jehovah ' s witnesses endeavor to imitate jesus and his early disciples .  
+  **REF:** ከዚህ በተቃራኒ የይሆዋ ምስክሮች ኢየሱስና የመጀመሪያው መቶ ዘመን ደቀመዛሙርት የተዉትን ምሳሌ ለመከተል ይጥራሉ።  
+  **HYP:** በአንጻሩ ግን የይሆዋ ምስክሮችንና የጥንቶቹ ደቀ መዛሙርቱን ለመምሰል ይጥራሉ።
+- **SRC:** and there remained among the children of israel seven tribes , which had not yet received their inheritance .  
+  **REF:** ከእስራኤልም ልጆች ርስት ያልተካፈሉ ሰባት ነገድ ቀርተው ነበር።  
+  **HYP:** ከሰባት ነገዶችም መካከል ርስታቸውን አልተቀበሉም።
 
 ### rare
 
-- **SRC:** and as it was in the days of noe , so shall it be also in the days of the son of man .  
-  **REF:** በኖህ ዘመንም እንደ ሆነ፥ በሰው ልጅ ዘመን ደግሞ እንዲሁ ይሆናል።  
-  **HYP:** በምእራም ዘመንም ሁሉ በህልም ዘመን፥ በወንጌልም ዘመን፥
-- **SRC:** " when our son called and told me about a shooting at school , i couldn ' t believe it , " recalls heike .  
-  **REF:** ሄይከ የተባለች አንዲት ሴት እንዲህ ብላለች፦ " ልጃችን ደውሎ በትምህርት ቤት ውስጥ እየተፈጸመ ስላለው ግድያ ሲነግረኝ ማመን አልቻልኩም።  
-  **HYP:** " ልጃችንን ሲጠራው፣ በትምህርት ቤት ውስጥ ስለ አንድ ትንሽ አገር ስለ ምስቡም አልነበኝም " በማለት ተናግሯል።
-- **SRC:** i was born in ilocos norte , philippines , on december 10 , 1968 , the seventh of ten children .  
-  **REF:** ታህሳስ 10, 1968 በኢሎኮስ ኖርቲ፣ ፊሊፒንስ ተወለድኩ፤ በቤተሰባችን ውስጥ ካሉት አስር ልጆች መካከል እኔ ሰባተኛ ነበርኩ።  
-  **HYP:** በታህሳስ 10, 1968 የ1968 19 አመት ልጅ ሳለሁ የሴት ልጆችና ካርድ ነበር።
+- **SRC:** besides , they claimed that they had neither the facilities nor the manpower to provide an alternative physical education program .  
+  **REF:** ከዚህም በላይ አማራጭ የአካል ማጎልመሻ ትምህርት ለማዘጋጀት የሚረዱ መሳሪያዎችም ሆኑ የሰው ሀይል የለንም አለ።  
+  **HYP:** ከዚህም በላይ ምስጢሩና የሰው ልጆች የህክምና ትምህርት ቤቶችን ለማስተዳደር የሚያስችል አማራጭ የለም ብለው ይናገራሉ።
+- **SRC:** as told by george warienchuck  
+  **REF:** ጆርጅ ዎረንቸክ እንደተናገረው  
+  **HYP:** በስፔይን ሪፑብሊክ ንገረን እንደተናገረው
+- **SRC:** or a young brother or sister who has athletic ability may find that recruiters try to entice him or her into a sports career .  
+  **REF:** ወይም ደግሞ በአትሌቲክስ ዘርፍ ወጣቶችን የሚመለምሉ ሰዎች በዚህ ረገድ ጥሩ ችሎታ ያለውን አንድ ክርስቲያን ወጣት ወደ ስፖርቱ አለም እንዲገባ ሊያግባቡት ይሞክሩ ይሆናል።  
+  **HYP:** ወይም ደግሞ አንድ ወጣት ወይም አንዲት ወጣት አንድ ወጣት ወደ ፖርቱጋል ሄድን።

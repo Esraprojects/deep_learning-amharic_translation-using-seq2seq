@@ -5,7 +5,7 @@ set -euo pipefail
 cd "$(dirname "$0")/.."
 mkdir -p logs
 [ -f models/spm_en.model ] || python3 src/preprocess.py
-COMMON="--emb 256 --hid 256 --layers 2 --batch_size 128 --epochs 5 --time_budget 150 --threads 2"
+COMMON="--emb 256 --hid 256 --layers 2 --batch_size 128 --epochs 12 --time_budget 420 --threads 2"
 pids=()
 for m in seq2seq attention; do
   if [ ! -f "results/train_$m.json" ]; then

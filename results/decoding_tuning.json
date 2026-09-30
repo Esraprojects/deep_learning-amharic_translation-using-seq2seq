@@ -1,0 +1,63 @@
+{
+  "validation_sentences": 500,
+  "model": "attention",
+  "grid": [
+    {
+      "setting": "greedy",
+      "bleu": 11.39
+    },
+    {
+      "setting": {
+        "beam": 5,
+        "alpha": 0.2,
+        "no_repeat_ngram": 0
+      },
+      "bleu": 12.15
+    },
+    {
+      "setting": {
+        "beam": 5,
+        "alpha": 0.2,
+        "no_repeat_ngram": 3
+      },
+      "bleu": 12.15
+    },
+    {
+      "setting": {
+        "beam": 5,
+        "alpha": 0.7,
+        "no_repeat_ngram": 0
+      },
+      "bleu": 12.54
+    },
+    {
+      "setting": {
+        "beam": 5,
+        "alpha": 0.7,
+        "no_repeat_ngram": 3
+      },
+      "bleu": 12.56
+    },
+    {
+      "setting": {
+        "beam": 5,
+        "alpha": 1.0,
+        "no_repeat_ngram": 0
+      },
+      "bleu": 12.77
+    },
+    {
+      "setting": {
+        "beam": 5,
+        "alpha": 1.0,
+        "no_repeat_ngram": 3
+      },
+      "bleu": 12.7
+    }
+  ],
+  "chosen": {
+    "beam": 5,
+    "alpha": 1.0,
+    "no_repeat_ngram": 3
+  }
+}
