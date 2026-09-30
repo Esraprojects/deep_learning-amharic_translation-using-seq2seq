@@ -89,7 +89,11 @@ def tune_beam(model, tok, n=500):
             hyps, _ = decode_beam(model, tok, valid, **cfg)
             grid.append({"setting": cfg, "bleu": round(sacrebleu.corpus_bleu(hyps, [vrefs[:n]]).score, 2)})
             print("tuning", grid[-1], flush=True)
-    best = max((g for g in grid if g["setting"] != "greedy"), key=lambda g: g["bleu"])
+    beams = [g for g in grid if g["setting"] != "greedy"]
+    top = max(g["bleu"] for g in beams)
+    # tie-break for readability: prefer repeat blocking when it costs < 0.2 BLEU
+    near = [g for g in beams if g["bleu"] >= top - 0.2]
+    best = max(near, key=lambda g: (g["setting"]["no_repeat_ngram"] > 0, g["bleu"]))
     return best["setting"], grid
 
 

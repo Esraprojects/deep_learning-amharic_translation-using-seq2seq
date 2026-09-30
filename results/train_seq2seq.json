@@ -1,0 +1,89 @@
+{
+  "model": "seq2seq",
+  "parameters": 7995200,
+  "training_pairs": 517095,
+  "training_time_sec": 25213.3,
+  "best_val_loss": 3.6506,
+  "hyperparameters": {
+    "model": "seq2seq",
+    "emb": 256,
+    "hid": 256,
+    "layers": 2,
+    "dropout": 0.3,
+    "batch_size": 128,
+    "lr": 0.001,
+    "epochs": 12,
+    "label_smoothing": 0.1,
+    "clip": 1.0,
+    "max_train": 0,
+    "time_budget": 420.0,
+    "threads": 2,
+    "seed": 1,
+    "out": "/home/user/deep_learning-amharic_translation-using-seq2seq/models",
+    "optimizer": "Adam",
+    "loss": "CrossEntropy (label smoothing)",
+    "scheduler": "ReduceLROnPlateau(factor=0.5, patience=0)"
+  },
+  "history": [
+    {
+      "epoch": 1,
+      "train_loss": 5.8614,
+      "val_loss": 4.5886,
+      "val_ppl": 98.36,
+      "val_bleu_500": 2.25,
+      "lr": 0.001,
+      "steps": 4040,
+      "partial_epoch": false
+    },
+    {
+      "epoch": 2,
+      "train_loss": 5.1983,
+      "val_loss": 4.1515,
+      "val_ppl": 63.53,
+      "val_bleu_500": 4.61,
+      "lr": 0.001,
+      "steps": 4040,
+      "partial_epoch": false
+    },
+    {
+      "epoch": 3,
+      "train_loss": 4.9733,
+      "val_loss": 3.9351,
+      "val_ppl": 51.17,
+      "val_bleu_500": 5.1,
+      "lr": 0.001,
+      "steps": 4040,
+      "partial_epoch": false
+    },
+    {
+      "epoch": 4,
+      "train_loss": 4.8458,
+      "val_loss": 3.7956,
+      "val_ppl": 44.5,
+      "val_bleu_500": 5.93,
+      "lr": 0.001,
+      "steps": 4040,
+      "partial_epoch": false
+    },
+    {
+      "epoch": 5,
+      "train_loss": 4.7584,
+      "val_loss": 3.6989,
+      "val_ppl": 40.4,
+      "val_bleu_500": 6.33,
+      "lr": 0.001,
+      "steps": 4040,
+      "partial_epoch": false
+    },
+    {
+      "epoch": 6,
+      "train_loss": 4.7005,
+      "val_loss": 3.6506,
+      "val_ppl": 38.5,
+      "val_bleu_500": 6.43,
+      "lr": 0.001,
+      "steps": 2542,
+      "partial_epoch": true
+    }
+  ]
+}
