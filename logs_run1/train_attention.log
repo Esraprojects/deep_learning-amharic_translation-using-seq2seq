@@ -1,0 +1,45 @@
+attention: 8,191,808 parameters, 427,665 training pairs
+  epoch 1 step 500/3342 loss 6.856 (0.909s/step)
+  epoch 1 step 1000/3342 loss 6.525 (0.890s/step)
+  epoch 1 step 1500/3342 loss 6.320 (0.838s/step)
+--- restart Tue Sep 29 23:30:01 UTC 2026 ---
+attention: 8,191,808 parameters, 427,665 training pairs
+  epoch 1 step 500/3342 loss 6.856 (0.825s/step)
+  epoch 1 step 1000/3342 loss 6.525 (0.767s/step)
+  epoch 1 step 1500/3342 loss 6.320 (0.747s/step)
+  epoch 1 step 2000/3342 loss 6.175 (0.736s/step)
+  epoch 1 step 2500/3342 loss 6.054 (0.734s/step)
+  epoch 1 step 3000/3342 loss 5.955 (0.737s/step)
+{"epoch": 1, "train_loss": 5.8952, "val_loss": 4.5662, "val_ppl": 96.17, "val_bleu_500": 4.49, "lr": 0.001, "steps": 3342, "partial_epoch": false}
+    ይሁን እንጂ ይህ ደግሞ " የህንት ቀን " የሚል ነው ።
+    ከጊዜ በኋላ እውነተኛ አምልኮ የሚከለከበች ነው ።
+    የይሆዋ ምስክሮችን የመጽሀፍ ቅዱስ ጥናት የሚጠቀሙት የመጽሀፍ ቅዱስ ጥናት ነው ።
+  epoch 2 step 500/3342 loss 5.271 (0.743s/step)
+  epoch 2 step 1000/3342 loss 5.219 (0.730s/step)
+  epoch 2 step 1500/3342 loss 5.182 (0.729s/step)
+  epoch 2 step 2000/3342 loss 5.150 (0.729s/step)
+  epoch 2 step 2500/3342 loss 5.123 (0.730s/step)
+  epoch 2 step 3000/3342 loss 5.097 (0.730s/step)
+{"epoch": 2, "train_loss": 5.0807, "val_loss": 3.9759, "val_ppl": 53.3, "val_bleu_500": 6.41, "lr": 0.001, "steps": 3342, "partial_epoch": false}
+    ይሁን እንጂ ይህ ሁኔታ " ጊዜ " የሚል ነው ።
+    ከዚያ በኋላ እውነተኛ አምልኮም ሆነ በምእምረት ይሞላሉ ።
+    በተለይ ደግሞ አንድ ቤተሰብ በመጽሀፉ መጽሀፍ ውስጥ ያሉ ሰዎች የይሆዋ ምስክሮችን አንድነት የሚያንጸባርቁት ጥሩ ምክር ነው ።
+  epoch 3 step 500/3342 loss 4.838 (0.720s/step)
+  epoch 3 step 1000/3342 loss 4.828 (0.724s/step)
+  epoch 3 step 1500/3342 loss 4.815 (0.735s/step)
+  epoch 3 step 2000/3342 loss 4.799 (0.731s/step)
+  epoch 3 step 2500/3342 loss 4.786 (0.732s/step)
+  epoch 3 step 3000/3342 loss 4.773 (0.732s/step)
+{"epoch": 3, "train_loss": 4.7621, "val_loss": 3.685, "val_ppl": 39.85, "val_bleu_500": 7.68, "lr": 0.001, "steps": 3342, "partial_epoch": false}
+    ይሁን እንጂ ይህ ጉዳይ " ጊዜ " የሚለው ቃል ነው ።
+    ከጊዜ በኋላ እውነተኛ አምልኮ ይሞላሉ ።
+    መጽሀፍ ቅዱስ በቤተሰብ ላይ ያለው ጥሩ ምክር በመጽሀፉ ላይ የተመሰረተ ነው ።
+  epoch 4 step 500/3342 loss 4.611 (0.728s/step)
+  epoch 4 step 1000/3342 loss 4.610 (0.727s/step)
+  epoch 4 step 1500/3342 loss 4.608 (0.739s/step)
+  epoch 4 step 2000/3342 loss 4.603 (0.738s/step)
+{"epoch": 4, "train_loss": 4.6002, "val_loss": 3.5547, "val_ppl": 34.98, "val_bleu_500": 8.18, "lr": 0.001, "steps": 2187, "partial_epoch": true}
+    ይሁን እንጂ ይህ ጊዜ " ጊዜ " የሚለው ነው ።
+    ከጊዜ በኋላ እውነተኛው አምልኮ በቅርቡ ይገኝበታል ።
+    አንድ ባልና ሚስት መጽሀፍ ቅዱስ በመጽሀፉ ላይ ትልቅ ምክር የሚሰጠው መጽሀፍ ቅዱስ ማጥናትን ይጨምራል ።
+done in 150.2 min, best val loss 3.5547

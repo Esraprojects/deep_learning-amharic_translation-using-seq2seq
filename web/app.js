@@ -1,6 +1,7 @@
 // In-browser English -> Amharic translation with the exported ONNX models.
 import * as ort from "https://cdn.jsdelivr.net/npm/onnxruntime-web@1.30.0/dist/ort.wasm.min.mjs";
 import { normalizeEn, detokenizeAm, SentencePiece } from "./tokenizer.js";
+import { beamSearch } from "./beam.js";
 
 ort.env.wasm.wasmPaths = "https://cdn.jsdelivr.net/npm/onnxruntime-web@1.30.0/dist/";
 ort.env.wasm.numThreads = 1;
@@ -33,23 +34,15 @@ async function translate(kind, text) {
   const S = ids.length;
   const src = new ort.Tensor("int64", BigInt64Array.from(ids.map(BigInt)), [1, S]);
   const e = await enc.run({ src });
-  let h = e.h, c = e.c;
-  let tok = BOS;
-  const out = [], attn = [];
-  const maxLen = 2 * S + 10;
-  for (let step = 0; step < maxLen; step++) {
+  const step = async (tok, [h, c]) => {
     const feeds = { tok: new ort.Tensor("int64", BigInt64Array.from([BigInt(tok)]), [1]),
                     h_in: h, c_in: c, enc_out: e.enc_out, keys: e.keys };
     for (const k of Object.keys(feeds)) if (!dec.inputNames.includes(k)) delete feeds[k];
     const r = await dec.run(feeds);
-    const logits = r.logits.data;
-    let best = 0;
-    for (let i = 1; i < logits.length; i++) if (logits[i] > logits[best]) best = i;
-    attn.push(Array.from(r.attn.data));
-    h = r.h_out; c = r.c_out; tok = best;
-    if (best === EOS) break;
-    out.push(best);
-  }
+    return { logits: r.logits.data, state: [r.h_out, r.c_out], attn: Array.from(r.attn.data) };
+  };
+  const best = await beamSearch(step, [e.h, e.c], S, vocab.beam);
+  const out = best.seq, attn = best.atts;
   return {
     translation: detokenizeAm(spAm.decode(out)),
     normalized: norm,
@@ -107,7 +100,7 @@ async function run() {
     const base = await translate("seq2seq", text);
     $("out-seq2seq").textContent = base.translation || "—";
     $("ms-seq2seq").textContent = `${base.ms} ms`;
-    $("status").textContent = "Ran entirely in your browser (ONNX Runtime Web, CPU).";
+    $("status").textContent = "Ran entirely in your browser (beam search, ONNX Runtime Web).";
   } catch (err) {
     console.error(err);
     $("status").textContent = "Error: " + err.message;

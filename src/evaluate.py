@@ -29,8 +29,9 @@ from matplotlib import font_manager  # noqa: E402
 
 sys.path.insert(0, os.path.dirname(__file__))
 from data import ROOT, Tokenizers, batches, encode_split, load_split, pad  # noqa: E402
-from models import count_parameters, greedy_decode  # noqa: E402
+from models import beam_search, count_parameters, greedy_decode  # noqa: E402
 from train import evaluate_loss  # noqa: E402
+import translate  # noqa: E402
 from translate import Translator  # noqa: E402
 from text import detokenize_am, normalize_am  # noqa: E402
 
@@ -66,6 +67,30 @@ def decode_all(model, tok, data, batch_size=100):
         ids, _ = greedy_decode(model, pad(src), L)
         hyps += [tok.decode_tgt(x) for x in ids]
     return hyps, time.perf_counter() - t0
+
+
+def decode_beam(model, tok, data, **cfg):
+    hyps, t0 = [], time.perf_counter()
+    for s, _ in data:
+        ids, _ = beam_search(model, s, **cfg)
+        hyps.append(tok.decode_tgt(ids))
+    return hyps, time.perf_counter() - t0
+
+
+def tune_beam(model, tok, n=500):
+    """Pick length-normalization alpha and n-gram blocking on the validation set."""
+    valid = encode_split(tok, "valid")[:n]
+    _, vrefs = load_split("valid")
+    greedy, _ = decode_all(model, tok, valid)
+    grid = [{"setting": "greedy", "bleu": round(sacrebleu.corpus_bleu(greedy, [vrefs[:n]]).score, 2)}]
+    for alpha in (0.2, 0.7, 1.0):
+        for ngram in (0, 3):
+            cfg = dict(beam=5, alpha=alpha, no_repeat_ngram=ngram)
+            hyps, _ = decode_beam(model, tok, valid, **cfg)
+            grid.append({"setting": cfg, "bleu": round(sacrebleu.corpus_bleu(hyps, [vrefs[:n]]).score, 2)})
+            print("tuning", grid[-1], flush=True)
+    best = max((g for g in grid if g["setting"] != "greedy"), key=lambda g: g["bleu"])
+    return best["setting"], grid
 
 
 def single_latency(tr, sentences):
@@ -250,30 +275,50 @@ def main():
     train_counts = Counter(w for s in train_src for w in s.split())
 
     metrics, preds, analysis, examples_idx, buckets, train_info = {}, {}, {}, {}, {}, {}
-    translators = {}
+    translators = {k: Translator(k) for k in KINDS}
+    test_df = pd.read_csv(os.path.join(ROOT, "data/processed/test.tsv"), sep="\t", keep_default_na=False)
+    sources = test_df["src"].tolist() if "src" in test_df else ["all"] * len(src)
+
+    # decoding hyper-parameters: tuned on validation data with the attention model, used for both
+    best_cfg, grid = tune_beam(translators["attention"].model, tok)
+    translate.BEAM.update(best_cfg)
+    with open(os.path.join(RES, "decoding_tuning.json"), "w") as f:
+        json.dump({"validation_sentences": 500, "model": "attention", "grid": grid, "chosen": best_cfg}, f, indent=2)
+    print("beam settings", best_cfg, flush=True)
+
     for k in KINDS:
-        tr = Translator(k)
-        translators[k] = tr
+        tr = translators[k]
         with open(os.path.join(RES, f"train_{k}.json")) as f:
             train_info[k] = json.load(f)
         loss = evaluate_loss(tr.model, test)
-        hyps, dt = decode_all(tr.model, tok, test)
+        greedy_hyps, dt = decode_all(tr.model, tok, test)
+        hyps, dt_beam = decode_beam(tr.model, tok, test, **translate.BEAM)
         preds[k] = hyps
         lat = single_latency(tr, src[:200])
         bleu = sacrebleu.corpus_bleu(hyps, [refs])
         chrf = sacrebleu.corpus_chrf(hyps, [refs])
+        per_source = {}
+        for name in sorted(set(sources)):
+            idx = [i for i, x in enumerate(sources) if x == name]
+            per_source[name] = {"n": len(idx), "bleu": round(sacrebleu.corpus_bleu(
+                [hyps[i] for i in idx], [[refs[i] for i in idx]]).score, 2)}
         size_mb = os.path.getsize(os.path.join(ROOT, "models", f"{k}.pt")) / 2**20
         metrics[k] = {
             "model": NAMES[k],
             "bleu": round(bleu.score, 2),
             "chrf": round(chrf.score, 2),
+            "bleu_greedy": round(sacrebleu.corpus_bleu(greedy_hyps, [refs]).score, 2),
+            "chrf_greedy": round(sacrebleu.corpus_chrf(greedy_hyps, [refs]).score, 2),
+            "repeated_words_pct_greedy": round(100 * sum(map(has_repetition, greedy_hyps)) / len(greedy_hyps), 2),
+            "bleu_by_source": per_source,
             "test_loss": round(loss, 4),
             "test_perplexity": round(math.exp(loss), 2),
             "parameters": count_parameters(tr.model),
             "model_size_mb": round(size_mb, 1),
             "epochs_trained": len(train_info[k]["history"]),
             "training_time_min": round(train_info[k]["training_time_sec"] / 60, 1),
-            "inference_time_test_set_sec": round(dt, 1),
+            "inference_time_test_set_sec": round(dt_beam, 1),
+            "inference_time_test_set_greedy_batched_sec": round(dt, 1),
             "inference_ms_per_sentence_batched": round(1000 * dt / len(test), 2),
             "inference_ms_per_sentence_single": round(lat, 1),
         }
@@ -288,14 +333,18 @@ def main():
                    "test_sentences": len(test)}, f, indent=2, ensure_ascii=False)
 
     # comparison table
-    rows = [("BLEU ↑", "bleu"), ("chrF ↑", "chrf"), ("Test loss (CE) ↓", "test_loss"),
+    rows = [("BLEU (beam search) ↑", "bleu"), ("chrF (beam search) ↑", "chrf"),
+            ("BLEU (greedy) ↑", "bleu_greedy"), ("chrF (greedy) ↑", "chrf_greedy"),
+            ("Outputs with repeated words, greedy (%) ↓", "repeated_words_pct_greedy"),
+            ("Test loss (CE) ↓", "test_loss"),
             ("Test perplexity ↓", "test_perplexity"), ("Parameters", "parameters"),
             ("Model size (MB)", "model_size_mb"), ("Epochs", "epochs_trained"),
             ("Training time (min)", "training_time_min"),
-            ("Inference, whole test set (s, batch 100)", "inference_time_test_set_sec"),
-            ("Inference per sentence, batched (ms)", "inference_ms_per_sentence_batched"),
-            ("Inference per sentence, single (ms)", "inference_ms_per_sentence_single")]
-    md = [f"# Model comparison (test set, {len(test)} sentences, greedy decoding)\n",
+            ("Inference, whole test set, beam search (s)", "inference_time_test_set_sec"),
+            ("Inference, whole test set, greedy batch 100 (s)", "inference_time_test_set_greedy_batched_sec"),
+            ("Inference per sentence, greedy batched (ms)", "inference_ms_per_sentence_batched"),
+            ("Inference per sentence, beam, single request (ms)", "inference_ms_per_sentence_single")]
+    md = [f"# Model comparison (test set, {len(test)} sentences, beam search {translate.BEAM})\n",
           "| Metric | Seq2Seq + LSTM | Attention Seq2Seq + LSTM |", "|---|---:|---:|"]
     for label, key in rows:
         a, b = metrics["seq2seq"][key], metrics["attention"][key]
@@ -306,6 +355,11 @@ def main():
               f"+{abs(metrics['attention']['chrf'] - metrics['seq2seq']['chrf']):.2f} chrF).\n")
     md.append(f"BLEU/chrF: sacrebleu {sacrebleu.__version__}, corpus-level, "
               "on normalized, punctuation-tokenized text.\n")
+    md.append("\n### BLEU by data source (beam search)\n")
+    md.append("| Source | n | Seq2Seq | Attention |")
+    md.append("|---|---:|---:|---:|")
+    for name, v in metrics["seq2seq"]["bleu_by_source"].items():
+        md.append(f"| {name} | {v['n']} | {v['bleu']} | {metrics['attention']['bleu_by_source'][name]['bleu']} |")
     md.append("\n## Error analysis (automatic)\n")
     md.append("| Indicator | Seq2Seq + LSTM | Attention Seq2Seq + LSTM |")
     md.append("|---|---:|---:|")

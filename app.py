@@ -45,6 +45,7 @@ api = FastAPI(title="English → Amharic Seq2Seq Translator",
 class TranslateRequest(BaseModel):
     text: str = Field(..., examples=["I am going to the university."])
     model: Literal["attention", "seq2seq"] = "attention"
+    decoding: Literal["beam", "greedy"] = "beam"
 
 
 class TranslateResponse(BaseModel):
@@ -64,7 +65,7 @@ def translate(req: TranslateRequest):
         raise HTTPException(400, "text must not be empty")
     if len(text) > MAX_CHARS:
         raise HTTPException(400, f"text must be at most {MAX_CHARS} characters")
-    return {"translation": TRANSLATORS[req.model].translate(text), "model": req.model}
+    return {"translation": TRANSLATORS[req.model].translate(text, decoding=req.decoding), "model": req.model}
 
 
 @api.post("/translate/details")
@@ -72,7 +73,7 @@ def translate_details(req: TranslateRequest):
     """Translation plus tokens, attention weights (attention model) and latency."""
     if not req.text.strip():
         raise HTTPException(400, "text must not be empty")
-    return TRANSLATORS[req.model].translate(req.text[:MAX_CHARS], return_details=True)
+    return TRANSLATORS[req.model].translate(req.text[:MAX_CHARS], return_details=True, decoding=req.decoding)
 
 
 # ---------------------------------------------------------------------------
@@ -99,7 +100,7 @@ def ui_translate(text):
         return "", "", None, ""
     att = TRANSLATORS["attention"].translate(text, return_details=True)
     base = TRANSLATORS["seq2seq"].translate(text, return_details=True)
-    info = (f"Preprocessed input: `{att['normalized_input']}`  \n"
+    info = (f"Preprocessed input: `{att['normalized_input']}` · decoding: beam search (k=5)  \n"
             f"Latency — attention: {att['latency_ms']} ms · seq2seq: {base['latency_ms']} ms (CPU)")
     fig = attention_figure(att)
     return att["translation"], base["translation"], fig, info

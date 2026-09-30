@@ -99,7 +99,8 @@ def export_vocab(lang):
 
 def main():
     os.makedirs(WEB, exist_ok=True)
-    meta = {"max_tokens": MAX_TOKENS, "models": {}}
+    from translate import BEAM
+    meta = {"max_tokens": MAX_TOKENS, "beam": BEAM, "models": {}}
     for kind in ("attention", "seq2seq"):
         meta["models"][kind] = export(kind)
         for part in ("encoder", "decoder"):

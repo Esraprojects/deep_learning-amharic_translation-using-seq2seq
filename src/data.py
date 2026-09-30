@@ -38,7 +38,9 @@ def encode_split(tok, name, cache_dir=os.path.join(ROOT, "data/processed")):
         return torch.load(cache)
     en, am = load_split(name)
     data = list(zip(tok.encode_src(en), tok.encode_tgt(am)))
-    torch.save(data, cache)
+    tmp = f"{cache}.{os.getpid()}.tmp"  # atomic: parallel training jobs may build it at once
+    torch.save(data, tmp)
+    os.replace(tmp, cache)
     return data
 
 
