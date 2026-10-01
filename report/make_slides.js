@@ -151,12 +151,12 @@ function num(n) { return n.toLocaleString("en-US"); }
   const s = pres.addSlide();
   title(s, "Translation examples", "Source → Seq2Seq → Attention-LSTM (beam search); full table with references in results/examples.md");
   const AX = JSON.parse(fs.readFileSync(path.join(ROOT, "results/attention_examples.json"), "utf8"));
-  const pick = [0, 1, 4, 3, 7].map((i) => AX[i]);
+  const pick = [2, 5, 0, 1, 4].map((i) => AX[i]);
   const ex = pick.map((d) => [d.source, d.seq2seq, d.translation]);
   const hdr = ["Source (EN)", "Seq2Seq + LSTM", "Attention-LSTM"].map((t) => ({ text: t, options: { bold: true, color: C.white, fill: { color: C.green }, fontFace: B } }));
   s.addTable([hdr, ...ex.map((r, i) => r.map((c, j) => ({ text: c, options: { fontFace: j ? AM : B, fontSize: j ? 15 : 13, fill: { color: i % 2 ? C.white : C.light } } })))],
     { x: 0.6, y: 1.8, w: 12.1, colW: [4.1, 4.0, 4.0], color: C.ink, rowH: 0.8, valign: "middle", border: { type: "none" } });
-  s.addText("With the added habtew data, everyday sentences like “university” now work; long rare sentences remain hard.", { x: 0.6, y: 6.7, w: 12.1, h: 0.4, fontFace: B, fontSize: 13, italic: true, color: C.muted, margin: 0, isTextBox: true });
+  s.addText("Added habtew data and fine-tuning on 761 curated pairs fixed everyday sentences like these; uncovered vocabulary (e.g. “weather”) is still hard.", { x: 0.6, y: 6.7, w: 12.1, h: 0.4, fontFace: B, fontSize: 13, italic: true, color: C.muted, margin: 0, isTextBox: true });
 }
 
 // 8. Error analysis ----------------------------------------------------------------------
@@ -194,7 +194,7 @@ function num(n) { return n.toLocaleString("en-US"); }
   bullets(s, ["Learns the SOV reordering: the final verb አስተምሯቸዋል attends back to “taught”",
               "“We must read the Bible every day” → Amharic order: every day, Bible, read, must",
               "The subject “we” becomes the verb suffix -ናል, so it has no attention row of its own",
-              "“I am going to the university” → ወደ ዩኒቨርሲቲው ሄድኩ: ዩኒቨርሲቲ attends to “university”, the suffix -ኩ to “I”"],
+              "“I am going to the university” → እኔ ወደ ዩኒቨርሲቲ ሄድኩ: ዩኒቨርሲቲ attends to “university”, the suffix -ኩ to “I”"],
           { x: 9.7, y: 1.9, w: 3.2, h: 5.0, fontSize: 14 });
 }
 

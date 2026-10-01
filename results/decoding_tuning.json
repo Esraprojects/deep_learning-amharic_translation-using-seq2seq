@@ -4,7 +4,7 @@
   "grid": [
     {
       "setting": "greedy",
-      "bleu": 11.39
+      "bleu": 11.68
     },
     {
       "setting": {
@@ -12,7 +12,7 @@
         "alpha": 0.2,
         "no_repeat_ngram": 0
       },
-      "bleu": 12.15
+      "bleu": 11.9
     },
     {
       "setting": {
@@ -20,7 +20,7 @@
         "alpha": 0.2,
         "no_repeat_ngram": 3
       },
-      "bleu": 12.15
+      "bleu": 11.8
     },
     {
       "setting": {
@@ -28,7 +28,7 @@
         "alpha": 0.7,
         "no_repeat_ngram": 0
       },
-      "bleu": 12.54
+      "bleu": 11.93
     },
     {
       "setting": {
@@ -36,7 +36,7 @@
         "alpha": 0.7,
         "no_repeat_ngram": 3
       },
-      "bleu": 12.56
+      "bleu": 11.83
     },
     {
       "setting": {
@@ -44,7 +44,7 @@
         "alpha": 1.0,
         "no_repeat_ngram": 0
       },
-      "bleu": 12.77
+      "bleu": 12.41
     },
     {
       "setting": {
@@ -52,7 +52,7 @@
         "alpha": 1.0,
         "no_repeat_ngram": 3
       },
-      "bleu": 12.7
+      "bleu": 12.42
     }
   ],
   "chosen": {

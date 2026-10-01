@@ -1,0 +1,595 @@
+{
+  "model": "seq2seq",
+  "curated_train": 647,
+  "curated_heldout": 114,
+  "settings": {
+    "model": "seq2seq",
+    "upsample": 2,
+    "original": 40000,
+    "epochs": 1,
+    "lr": 0.0002,
+    "batch_size": 64,
+    "threads": 2
+  },
+  "before": {
+    "valid_loss": 3.6506,
+    "heldout_bleu": 1.25
+  },
+  "after": {
+    "valid_loss": 3.6424,
+    "heldout_bleu": 15.29
+  },
+  "minutes": 3.7,
+  "heldout_examples": [
+    {
+      "en": "my brother played on the field .",
+      "ref": "ወንድሜ ሜዳ ላይ ተጫወተ ።",
+      "hyp": "ወንድሜ ወንድሜን እያጠና ነው ።"
+    },
+    {
+      "en": "i am writing a letter .",
+      "ref": "እኔ ደብዳቤ እየጻፍኩ ነው ።",
+      "hyp": "እኔ ደብዳቤው ደብዳቤ ላክሁ ።"
+    },
+    {
+      "en": "my brother is studying .",
+      "ref": "ወንድሜ እያጠና ነው ።",
+      "hyp": "ወንድሜ ወንድሜ ነው ።"
+    },
+    {
+      "en": "they are playing in the house .",
+      "ref": "እነሱ ቤት ውስጥ እየተጫወቱ ነው ።",
+      "hyp": "እነሱ ቤት ውስጥ ቤት ውስጥ ይገኛሉ ።"
+    },
+    {
+      "en": "my sister is writing at home .",
+      "ref": "እህቴ ቤት ውስጥ እየጻፈች ነው ።",
+      "hyp": "እህቴ ቤት ውስጥ እያጠናች ነው ።"
+    },
+    {
+      "en": "we played in the house .",
+      "ref": "እኛ ቤት ውስጥ ተጫወትን ።",
+      "hyp": "እኛ ቤት ውስጥ ሄድን ።"
+    },
+    {
+      "en": "my brother is writing .",
+      "ref": "ወንድሜ እየጻፈ ነው ።",
+      "hyp": "ወንድሜ ነው ።"
+    },
+    {
+      "en": "the children are not playing in the garden .",
+      "ref": "ልጆቹ በአትክልት ቦታው ውስጥ እየተጫወቱ አይደሉም ።",
+      "hyp": "ልጆቹ ልጆች ቤት ውስጥ አይኖሩም ።"
+    },
+    {
+      "en": "they are reading .",
+      "ref": "እነሱ እያነበቡ ነው ።",
+      "hyp": "እነሱ ናቸው ።"
+    },
+    {
+      "en": "she is writing at home .",
+      "ref": "እሷ ቤት ውስጥ እየጻፈች ነው ።",
+      "hyp": "እሷ ቤት ውስጥ ቤት ውስጥ ነው ።"
+    },
+    {
+      "en": "the students are playing near the river .",
+      "ref": "ተማሪዎቹ ወንዙ አጠገብ እየተጫወቱ ነው ።",
+      "hyp": "ተማሪዎቹ ወደ ቤት እየሄዱ ነው ።"
+    },
+    {
+      "en": "the boy is eating dinner .",
+      "ref": "ልጁ እራት እየበላ ነው ።",
+      "hyp": "ልጁ ቤት ውስጥ ነው ።"
+    },
+    {
+      "en": "they are playing on the field .",
+      "ref": "እነሱ ሜዳ ላይ እየተጫወቱ ነው ።",
+      "hyp": "እነሱ በህብረተሰቡ ውስጥ ናቸው ።"
+    },
+    {
+      "en": "he played at school .",
+      "ref": "እሱ ትምህርት ቤት ውስጥ ተጫወተ ።",
+      "hyp": "በትምህርት ቤት ትምህርት ቤት ውስጥ ነበር ።"
+    },
+    {
+      "en": "the boy is writing at home .",
+      "ref": "ልጁ ቤት ውስጥ እየጻፈ ነው ።",
+      "hyp": "ልጁ ቤት ውስጥ ነው ።"
+    },
+    {
+      "en": "the students are eating bread .",
+      "ref": "ተማሪዎቹ ዳቦ እየበሉ ነው ።",
+      "hyp": "ተማሪዎቹ ቤት ውስጥ ናቸው ።"
+    },
+    {
+      "en": "the students are running in the kitchen .",
+      "ref": "ተማሪዎቹ ማእድ ቤት ውስጥ እየሮጡ ነው ።",
+      "hyp": "ተማሪዎቹ ቤት ውስጥ እየተጫወቱ ነው ።"
+    },
+    {
+      "en": "the boy wants to play .",
+      "ref": "ልጁ መጫወት ይፈልጋል ።",
+      "hyp": "ልጁ ባለቤቱን ወስኗል ።"
+    },
+    {
+      "en": "my brother is playing football .",
+      "ref": "ወንድሜ እግር ኳስ እየተጫወተ ነው ።",
+      "hyp": "ወንድሜ ወንድሜን እያጠና ነው ።"
+    },
+    {
+      "en": "i played near the river .",
+      "ref": "እኔ ወንዙ አጠገብ ተጫወትኩ ።",
+      "hyp": "ወደ ምኩራብ ሄድኩ ።"
+    },
+    {
+      "en": "they are cooking .",
+      "ref": "እነሱ እያበሰሉ ነው ።",
+      "hyp": "እነሱ ናቸው ።"
+    },
+    {
+      "en": "the boy played on the field .",
+      "ref": "ልጁ ሜዳ ላይ ተጫወተ ።",
+      "hyp": "ልጁ ቤት ውስጥ ነበር ።"
+    },
+    {
+      "en": "my father is working .",
+      "ref": "አባቴ እየሰራ ነው ።",
+      "hyp": "አባቴ ነው ።"
+    },
+    {
+      "en": "he is playing near the river .",
+      "ref": "እሱ ወንዙ አጠገብ እየተጫወተ ነው ።",
+      "hyp": "እሱ ወደ ባህርው እየሄዱ ነው ።"
+    },
+    {
+      "en": "the girl is studying .",
+      "ref": "ልጅቷ እያጠናች ነው ።",
+      "hyp": "ልጅቷ ነው ።"
+    },
+    {
+      "en": "my friends are eating in the kitchen .",
+      "ref": "ጓደኞቼ ማእድ ቤት ውስጥ እየበሉ ነው ።",
+      "hyp": "ጓደኞቼ ቤት ውስጥ እየሄዱ ነው ።"
+    },
+    {
+      "en": "my friends are writing at home .",
+      "ref": "ጓደኞቼ ቤት ውስጥ እየጻፉ ነው ።",
+      "hyp": "ጓደኞቼ ቤት ውስጥ እየመጡ ነው ።"
+    },
+    {
+      "en": "she is reading at home .",
+      "ref": "እሷ ቤት ውስጥ እያነበበች ነው ።",
+      "hyp": "እሷ ቤት ውስጥ እያጠናች ነው ።"
+    },
+    {
+      "en": "the students are playing in the house .",
+      "ref": "ተማሪዎቹ ቤት ውስጥ እየተጫወቱ ነው ።",
+      "hyp": "ተማሪዎቹ ቤት ውስጥ እየሄዱ ነው ።"
+    },
+    {
+      "en": "i played in the house .",
+      "ref": "እኔ ቤት ውስጥ ተጫወትኩ ።",
+      "hyp": "እኔ ቤት ውስጥ ቤት ውስጥ እያገለገልኩ ነው ።"
+    },
+    {
+      "en": "the students are working in the kitchen .",
+      "ref": "ተማሪዎቹ ማእድ ቤት ውስጥ እየሰሩ ነው ።",
+      "hyp": "ተማሪዎቹ ቤት ውስጥ እየተጫወቱ ነው ።"
+    },
+    {
+      "en": "the girl is not playing .",
+      "ref": "ልጅቷ እየተጫወተች አይደለችም ።",
+      "hyp": "ልጅቷቷቷ ነው ።"
+    },
+    {
+      "en": "they played on the field .",
+      "ref": "እነሱ ሜዳ ላይ ተጫወቱ ።",
+      "hyp": "እነሱም ምስጢሩን ይመለከቱ ነበር ።"
+    },
+    {
+      "en": "the students are eating .",
+      "ref": "ተማሪዎቹ እየበሉ ነው ።",
+      "hyp": "ተማሪዎቹ ቤት ውስጥ ናቸው ።"
+    },
+    {
+      "en": "the boys are running in the kitchen .",
+      "ref": "ወንዶቹ ልጆች ማእድ ቤት ውስጥ እየሮጡ ነው ።",
+      "hyp": "ልጆቹ ቤት ውስጥ እየሄዱ ነው ።"
+    },
+    {
+      "en": "my sister is working .",
+      "ref": "እህቴ እየሰራች ነው ።",
+      "hyp": "እህቴ እያጠናች ነው ።"
+    },
+    {
+      "en": "she is working at home .",
+      "ref": "እሷ ቤት ውስጥ እየሰራች ነው ።",
+      "hyp": "እሷ ቤት ውስጥ ቤት ውስጥ ነው ።"
+    },
+    {
+      "en": "we are running in the kitchen .",
+      "ref": "እኛ ማእድ ቤት ውስጥ እየሮጥን ነው ።",
+      "hyp": "እኛ ቤት ውስጥ እየተጓዝን ነው ።"
+    },
+    {
+      "en": "she is cooking .",
+      "ref": "እሷ እያበሰለች ነው ።",
+      "hyp": "እሷን ትወዳለች ።"
+    },
+    {
+      "en": "the students played near the river .",
+      "ref": "ተማሪዎቹ ወንዙ አጠገብ ተጫወቱ ።",
+      "hyp": "ተማሪዎቹ ወደ ቤት ሄዱ ።"
+    },
+    {
+      "en": "the boys are playing football .",
+      "ref": "ወንዶቹ ልጆች እግር ኳስ እየተጫወቱ ነው ።",
+      "hyp": "ልጆቹ ቤት ውስጥ ናቸው ።"
+    },
+    {
+      "en": "they are playing at school .",
+      "ref": "እነሱ ትምህርት ቤት ውስጥ እየተጫወቱ ነው ።",
+      "hyp": "በትምህርት ቤት ውስጥ ትምህርት ቤት ውስጥ ይገኛሉ ።"
+    },
+    {
+      "en": "the boys are eating in the kitchen .",
+      "ref": "ወንዶቹ ልጆች ማእድ ቤት ውስጥ እየበሉ ነው ።",
+      "hyp": "ልጆቹ ቤት ውስጥ እየሄዱ ነው ።"
+    },
+    {
+      "en": "the children are eating at home .",
+      "ref": "ልጆቹ ቤት ውስጥ እየበሉ ነው ።",
+      "hyp": "ልጆቹ ቤት ውስጥ ቤት ውስጥ ይገኛሉ ።"
+    },
+    {
+      "en": "my brother is writing at home .",
+      "ref": "ወንድሜ ቤት ውስጥ እየጻፈ ነው ።",
+      "hyp": "ወንድሜ ቤት ውስጥ ነው ።"
+    },
+    {
+      "en": "my mother is studying at home .",
+      "ref": "እናቴ ቤት ውስጥ እያጠናች ነው ።",
+      "hyp": "እናቴ ቤት ውስጥ እያጠናች ነው ።"
+    },
+    {
+      "en": "she is studying at home .",
+      "ref": "እሷ ቤት ውስጥ እያጠናች ነው ።",
+      "hyp": "እሷ ቤት ውስጥ እያጠናች ነው ።"
+    },
+    {
+      "en": "the boy is eating bread .",
+      "ref": "ልጁ ዳቦ እየበላ ነው ።",
+      "hyp": "ልጁ ምስጢር ነው ።"
+    },
+    {
+      "en": "my sister is reading at home .",
+      "ref": "እህቴ ቤት ውስጥ እያነበበች ነው ።",
+      "hyp": "እህቴ ቤት ውስጥ እያጠናች ነው ።"
+    },
+    {
+      "en": "we are playing football .",
+      "ref": "እኛ እግር ኳስ እየተጫወትን ነው ።",
+      "hyp": "እኛ ድምጻችንን እንጠብቃለን ።"
+    },
+    {
+      "en": "the children are playing outside .",
+      "ref": "ልጆቹ ውጭ እየተጫወቱ ነው ።",
+      "hyp": "ልጆቹ ቤት ውስጥ ናቸው ።"
+    },
+    {
+      "en": "i am playing on the field .",
+      "ref": "እኔ ሜዳ ላይ እየተጫወትኩ ነው ።",
+      "hyp": "እኔ በምስጢር ቤት ውስጥ ሄድኩ ።"
+    },
+    {
+      "en": "i am playing in the garden .",
+      "ref": "እኔ በአትክልት ቦታው ውስጥ እየተጫወትኩ ነው ።",
+      "hyp": "እኔ በቤቴ ውስጥ እሰራለሁ ።"
+    },
+    {
+      "en": "my brother is playing in the garden .",
+      "ref": "ወንድሜ በአትክልት ቦታው ውስጥ እየተጫወተ ነው ።",
+      "hyp": "ወንድሜ ወንድሜን እያጠና ነው ።"
+    },
+    {
+      "en": "my mother is reading in the kitchen .",
+      "ref": "እናቴ ማእድ ቤት ውስጥ እያነበበች ነው ።",
+      "hyp": "እናቴ ቤት ውስጥ እያጠናች ነው ።"
+    },
+    {
+      "en": "we are cooking at home .",
+      "ref": "እኛ ቤት ውስጥ እያበሰልን ነው ።",
+      "hyp": "ከቤት ወደ ቤት እንሄድ ነበር ።"
+    },
+    {
+      "en": "my friends are running .",
+      "ref": "ጓደኞቼ እየሮጡ ነው ።",
+      "hyp": "ጓደኞቼ ጓደኞቼ ናቸው ።"
+    },
+    {
+      "en": "my mother is reading a book .",
+      "ref": "እናቴ መጽሀፍ እያነበበች ነው ።",
+      "hyp": "እናቴ መጽሀፍ ቅዱስን ማጥናት ጀመረች ።"
+    },
+    {
+      "en": "the girl is playing in the garden .",
+      "ref": "ልጅቷ በአትክልት ቦታው ውስጥ እየተጫወተች ነው ።",
+      "hyp": "ልጅቷቷቷታል ።"
+    },
+    {
+      "en": "she played in the garden .",
+      "ref": "እሷ በአትክልት ቦታው ውስጥ ተጫወተች ።",
+      "hyp": "እርሷም መኖሪያዋን ተመለከተች ።"
+    },
+    {
+      "en": "they are eating at home .",
+      "ref": "እነሱ ቤት ውስጥ እየበሉ ነው ።",
+      "hyp": "እነሱ ቤት ውስጥ ይኖራሉ ።"
+    },
+    {
+      "en": "the students are playing with their friends .",
+      "ref": "ተማሪዎቹ ከጓደኞቻቸው ጋር እየተጫወቱ ነው ።",
+      "hyp": "ተማሪዎቹ ከጓደኞቻቸው ጋር የሚመሳሰል ነው ።"
+    },
+    {
+      "en": "my brother is reading .",
+      "ref": "ወንድሜ እያነበበ ነው ።",
+      "hyp": "ወንድሜ ወንድሜ ነው ።"
+    },
+    {
+      "en": "she is cooking at home .",
+      "ref": "እሷ ቤት ውስጥ እያበሰለች ነው ።",
+      "hyp": "እሷ ቤት ውስጥ እየበላች ነው ።"
+    },
+    {
+      "en": "he played outside .",
+      "ref": "እሱ ውጭ ተጫወተ ።",
+      "hyp": "እሱ ነበር ።"
+    },
+    {
+      "en": "the girl is cooking in the kitchen .",
+      "ref": "ልጅቷ ማእድ ቤት ውስጥ እያበሰለች ነው ።",
+      "hyp": "ልጅቷ ቤት ውስጥ እየመጣች ነው ።"
+    },
+    {
+      "en": "the boys are not playing in the garden .",
+      "ref": "ወንዶቹ ልጆች በአትክልት ቦታው ውስጥ እየተጫወቱ አይደሉም ።",
+      "hyp": "ልጆቹ ቤት ውስጥ እየሰሩ ነው ።"
+    },
+    {
+      "en": "the students are cooking dinner for the family .",
+      "ref": "ተማሪዎቹ ለቤተሰባቸው እራት እያበሰሉ ነው ።",
+      "hyp": "ተማሪዎቹ ቤት ውስጥ የሚጫወቱበት ቦታ ነው ።"
+    },
+    {
+      "en": "my sister is cooking lunch .",
+      "ref": "እህቴ ምሳ እያበሰለች ነው ።",
+      "hyp": "እህቴ ቤት ውስጥ እየበላች ነው ።"
+    },
+    {
+      "en": "my sister is writing a letter .",
+      "ref": "እህቴ ደብዳቤ እየጻፈች ነው ።",
+      "hyp": "እናቴ ደብዳቤው ጻፈች ።"
+    },
+    {
+      "en": "my mother is eating at home .",
+      "ref": "እናቴ ቤት ውስጥ እየበላች ነው ።",
+      "hyp": "እናቴ ቤት ውስጥ እየበላች ነው ።"
+    },
+    {
+      "en": "my brother is playing basketball .",
+      "ref": "ወንድሜ የቅርጫት ኳስ እየተጫወተ ነው ።",
+      "hyp": "ወንድሜ ወንድሜን እያጠና ነው ።"
+    },
+    {
+      "en": "my sister is working in the kitchen .",
+      "ref": "እህቴ ማእድ ቤት ውስጥ እየሰራች ነው ።",
+      "hyp": "እህቴ ቤት ውስጥ እየበላች ነው ።"
+    },
+    {
+      "en": "my brother is eating bread .",
+      "ref": "ወንድሜ ዳቦ እየበላ ነው ።",
+      "hyp": "ወንድሜ ድግምተኛ ነው ።"
+    },
+    {
+      "en": "my brother is working at home .",
+      "ref": "ወንድሜ ቤት ውስጥ እየሰራ ነው ።",
+      "hyp": "ወንድሜ ቤት ውስጥ ነው ።"
+    },
+    {
+      "en": "my sister is cooking food .",
+      "ref": "እህቴ ምግብ እያበሰለች ነው ።",
+      "hyp": "እህቴ ምግብ እየበላች ነው ።"
+    },
+    {
+      "en": "the boys are running .",
+      "ref": "ወንዶቹ ልጆች እየሮጡ ነው ።",
+      "hyp": "ልጆቹ ቤት ውስጥ ናቸው ።"
+    },
+    {
+      "en": "we played on the field .",
+      "ref": "እኛ ሜዳ ላይ ተጫወትን ።",
+      "hyp": "እኛ ወደ ቤት ተመለስን ።"
+    },
+    {
+      "en": "the children are working .",
+      "ref": "ልጆቹ እየሰሩ ነው ።",
+      "hyp": "ልጆቹ ልጆች ናቸው ።"
+    },
+    {
+      "en": "the children are not playing .",
+      "ref": "ልጆቹ እየተጫወቱ አይደሉም ።",
+      "hyp": "ልጆቹ ልጆች አይደሉም ።"
+    },
+    {
+      "en": "we are playing at school .",
+      "ref": "እኛ ትምህርት ቤት ውስጥ እየተጫወትን ነው ።",
+      "hyp": "በትምህርት ቤት ውስጥ ትምህርት ቤት ውስጥ እንሰራለን ።"
+    },
+    {
+      "en": "my friends are cooking in the kitchen .",
+      "ref": "ጓደኞቼ ማእድ ቤት ውስጥ እያበሰሉ ነው ።",
+      "hyp": "ጓደኞቼ ቤት ውስጥ እየሄዱ ነው ።"
+    },
+    {
+      "en": "we are cooking food .",
+      "ref": "እኛ ምግብ እያበሰልን ነው ።",
+      "hyp": "ምግብና ምግብ እንሰራለን ።"
+    },
+    {
+      "en": "the boys are reading the newspaper .",
+      "ref": "ወንዶቹ ልጆች ጋዜጣ እያነበቡ ነው ።",
+      "hyp": "ልጆቹ ቤት ውስጥ እየተጫወቱ ነው ።"
+    },
+    {
+      "en": "my sister is cooking dinner for the family .",
+      "ref": "እህቴ ለቤተሰቧ እራት እያበሰለች ነው ።",
+      "hyp": "እህቴ ከቤተሰቦቿ ጋር እየተገናኘች ነው ።"
+    },
+    {
+      "en": "the children are working in the kitchen .",
+      "ref": "ልጆቹ ማእድ ቤት ውስጥ እየሰሩ ነው ።",
+      "hyp": "ልጆቹ ቤት ውስጥ ነው ።"
+    },
+    {
+      "en": "they are writing .",
+      "ref": "እነሱ እየጻፉ ነው ።",
+      "hyp": "እነሱ ናቸው ።"
+    },
+    {
+      "en": "the children are reading at home .",
+      "ref": "ልጆቹ ቤት ውስጥ እያነበቡ ነው ።",
+      "hyp": "ልጆቹ ቤት ውስጥ እየተጫወቱ ነው ።"
+    },
+    {
+      "en": "the girl is running in the kitchen .",
+      "ref": "ልጅቷ ማእድ ቤት ውስጥ እየሮጠች ነው ።",
+      "hyp": "ልጅቷ ቤት ውስጥ እየመጣች ነው ።"
+    },
+    {
+      "en": "my father is reading .",
+      "ref": "አባቴ እያነበበ ነው ።",
+      "hyp": "አባቴ ነው ።"
+    },
+    {
+      "en": "the children are cooking in the kitchen .",
+      "ref": "ልጆቹ ማእድ ቤት ውስጥ እያበሰሉ ነው ።",
+      "hyp": "ልጆቹ ቤት ውስጥ እየሰሩ ነው ።"
+    },
+    {
+      "en": "we are working .",
+      "ref": "እኛ እየሰራን ነው ።",
+      "hyp": "እኛ ነን ።"
+    },
+    {
+      "en": "they are eating bread .",
+      "ref": "እነሱ ዳቦ እየበሉ ነው ።",
+      "hyp": "እነሱ ይበሉ ነበር ።"
+    },
+    {
+      "en": "the girl is cooking food .",
+      "ref": "ልጅቷ ምግብ እያበሰለች ነው ።",
+      "hyp": "ልጅቷ ሽልማለች ።"
+    },
+    {
+      "en": "the boys are cooking in the kitchen .",
+      "ref": "ወንዶቹ ልጆች ማእድ ቤት ውስጥ እያበሰሉ ነው ።",
+      "hyp": "ልጆቹ ቤት ውስጥ እየሄዱ ነው ።"
+    },
+    {
+      "en": "my brother is playing with his friends .",
+      "ref": "ወንድሜ ከጓደኞቹ ጋር እየተጫወተ ነው ።",
+      "hyp": "ወንድሜ ከወንድም ጋር ነው ።"
+    },
+    {
+      "en": "i am playing with my friends in the garden .",
+      "ref": "እኔ ከጓደኞቼ ጋር በአትክልት ቦታው ውስጥ እየተጫወትኩ ነው ።",
+      "hyp": "ከጓደኞቼ ጋር ተገናኝቻለሁ ።"
+    },
+    {
+      "en": "my brother is reading a book .",
+      "ref": "ወንድሜ መጽሀፍ እያነበበ ነው ።",
+      "hyp": "ወንድሜ መጽሀፍ ቅዱስ ነው ።"
+    },
+    {
+      "en": "the students are playing with their friends in the garden .",
+      "ref": "ተማሪዎቹ ከጓደኞቻቸው ጋር በአትክልት ቦታው ውስጥ እየተጫወቱ ነው ።",
+      "hyp": "ተማሪዎቹ ከጓደኞቻቸው ጋር የሚገናኙት እንዴት ነው ?"
+    },
+    {
+      "en": "we are writing .",
+      "ref": "እኛ እየጻፍን ነው ።",
+      "hyp": "እኛ ነን ።"
+    },
+    {
+      "en": "the girl is playing in the house .",
+      "ref": "ልጅቷ ቤት ውስጥ እየተጫወተች ነው ።",
+      "hyp": "ልጅቷ ቤት ውስጥ ነው ።"
+    },
+    {
+      "en": "the children are reading in the kitchen .",
+      "ref": "ልጆቹ ማእድ ቤት ውስጥ እያነበቡ ነው ።",
+      "hyp": "ልጆቹ ቤት ውስጥ እየተጫወቱ ነው ።"
+    },
+    {
+      "en": "he is running in the kitchen .",
+      "ref": "እሱ ማእድ ቤት ውስጥ እየሮጠ ነው ።",
+      "hyp": "እሱ ቤት ውስጥ ነው ።"
+    },
+    {
+      "en": "the girl is reading at home .",
+      "ref": "ልጅቷ ቤት ውስጥ እያነበበች ነው ።",
+      "hyp": "ልጅቷ ቤት ውስጥ እያጠናች ነው ።"
+    },
+    {
+      "en": "my brother is not playing in the garden .",
+      "ref": "ወንድሜ በአትክልት ቦታው ውስጥ እየተጫወተ አይደለም ።",
+      "hyp": "ወንድሜ ብቻ አይደለም ።"
+    },
+    {
+      "en": "i am writing at home .",
+      "ref": "እኔ ቤት ውስጥ እየጻፍኩ ነው ።",
+      "hyp": "እኔ ቤት ውስጥ ቤት ውስጥ እያገለገልኩ ነው ።"
+    },
+    {
+      "en": "the children are studying in the kitchen .",
+      "ref": "ልጆቹ ማእድ ቤት ውስጥ እያጠኑ ነው ።",
+      "hyp": "ልጆቹ ቤት ውስጥ እየተጫወቱ ነው ።"
+    },
+    {
+      "en": "he is playing with his friends in the garden .",
+      "ref": "እሱ ከጓደኞቹ ጋር በአትክልት ቦታው ውስጥ እየተጫወተ ነው ።",
+      "hyp": "ከጓደኞቻችን ጋር የሚመሳሰል ነው ።"
+    },
+    {
+      "en": "i am eating bread .",
+      "ref": "እኔ ዳቦ እየበላሁ ነው ።",
+      "hyp": "እኔ ነኝ ።"
+    },
+    {
+      "en": "they are running at home .",
+      "ref": "እነሱ ቤት ውስጥ እየሮጡ ነው ።",
+      "hyp": "እነሱ ቤት ውስጥ ይገኛሉ ።"
+    },
+    {
+      "en": "my brother is running at home .",
+      "ref": "ወንድሜ ቤት ውስጥ እየሮጠ ነው ።",
+      "hyp": "ወንድሜ ቤት ውስጥ ነው ።"
+    },
+    {
+      "en": "she is reading .",
+      "ref": "እሷ እያነበበች ነው ።",
+      "hyp": "እሷ ነው ።"
+    },
+    {
+      "en": "the children are writing a letter .",
+      "ref": "ልጆቹ ደብዳቤ እየጻፉ ነው ።",
+      "hyp": "እነዚህ ልጆች አሉ ።"
+    },
+    {
+      "en": "the students are reading at home .",
+      "ref": "ተማሪዎቹ ቤት ውስጥ እያነበቡ ነው ።",
+      "hyp": "ተማሪዎቹ ቤት ውስጥ እየተጫወቱ ነው ።"
+    }
+  ]
+}

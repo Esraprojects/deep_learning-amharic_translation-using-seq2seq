@@ -2,87 +2,87 @@
   "metrics": {
     "seq2seq": {
       "model": "Seq2Seq + LSTM",
-      "bleu": 5.21,
-      "chrf": 13.52,
-      "bleu_greedy": 4.77,
-      "chrf_greedy": 13.23,
-      "repeated_words_pct_greedy": 18.34,
+      "bleu": 5.26,
+      "chrf": 13.68,
+      "bleu_greedy": 4.91,
+      "chrf_greedy": 13.5,
+      "repeated_words_pct_greedy": 22.86,
       "bleu_by_source": {
         "habtew": {
           "n": 771,
-          "bleu": 8.2
+          "bleu": 8.07
         },
         "mt560": {
           "n": 4229,
-          "bleu": 4.67
+          "bleu": 4.75
         }
       },
-      "test_loss": 3.7009,
-      "test_perplexity": 40.48,
+      "test_loss": 3.6906,
+      "test_perplexity": 40.07,
       "parameters": 7995200,
       "model_size_mb": 30.5,
       "epochs_trained": 6,
       "training_time_min": 420.2,
-      "inference_time_test_set_sec": 406.2,
-      "inference_time_test_set_greedy_batched_sec": 20.2,
-      "inference_ms_per_sentence_batched": 4.04,
-      "inference_ms_per_sentence_single": 63.7
+      "inference_time_test_set_sec": 174.8,
+      "inference_time_test_set_greedy_batched_sec": 10.0,
+      "inference_ms_per_sentence_batched": 2.0,
+      "inference_ms_per_sentence_single": 33.0
     },
     "attention": {
       "model": "Attention Seq2Seq + LSTM",
-      "bleu": 11.27,
-      "chrf": 22.84,
-      "bleu_greedy": 10.23,
-      "chrf_greedy": 21.62,
-      "repeated_words_pct_greedy": 15.98,
+      "bleu": 11.35,
+      "chrf": 23.13,
+      "bleu_greedy": 10.36,
+      "chrf_greedy": 22.04,
+      "repeated_words_pct_greedy": 16.38,
       "bleu_by_source": {
         "habtew": {
           "n": 771,
-          "bleu": 15.75
+          "bleu": 16.3
         },
         "mt560": {
           "n": 4229,
-          "bleu": 10.5
+          "bleu": 10.49
         }
       },
-      "test_loss": 3.2015,
-      "test_perplexity": 24.57,
+      "test_loss": 3.1865,
+      "test_perplexity": 24.2,
       "parameters": 8191808,
       "model_size_mb": 31.3,
       "epochs_trained": 6,
       "training_time_min": 420.2,
-      "inference_time_test_set_sec": 394.2,
-      "inference_time_test_set_greedy_batched_sec": 23.3,
-      "inference_ms_per_sentence_batched": 4.66,
-      "inference_ms_per_sentence_single": 81.3
+      "inference_time_test_set_sec": 185.5,
+      "inference_time_test_set_greedy_batched_sec": 11.1,
+      "inference_ms_per_sentence_batched": 2.22,
+      "inference_ms_per_sentence_single": 35.6
     }
   },
   "best_model": "attention",
   "error_analysis": {
     "seq2seq": {
-      "repeated_words_pct": 5.88,
-      "too_short_missing_words_pct": 40.22,
-      "too_long_additional_words_pct": 5.86,
-      "mean_length_ratio_hyp_ref": 0.796,
-      "word_order_agreement": 0.953,
-      "word_order_errors_pct": 4.02,
-      "morphology_error_rate_pct": 3.82,
-      "named_entity_accuracy_pct": 81.85,
+      "repeated_words_pct": 7.74,
+      "too_short_missing_words_pct": 35.34,
+      "too_long_additional_words_pct": 7.42,
+      "mean_length_ratio_hyp_ref": 0.833,
+      "word_order_agreement": 0.948,
+      "word_order_errors_pct": 4.72,
+      "morphology_error_rate_pct": 3.81,
+      "named_entity_accuracy_pct": 82.54,
       "named_entity_cases": 1317,
-      "number_copy_accuracy_pct": 70.77,
+      "number_copy_accuracy_pct": 70.94,
       "rare_word_sentences": 488,
-      "bleu_rare_word_sentences": 1.87,
-      "bleu_common_word_sentences": 5.61,
+      "bleu_rare_word_sentences": 1.9,
+      "bleu_common_word_sentences": 5.65,
       "bleu_by_length": [
         {
           "bucket": "1-10",
           "n": 1164,
-          "bleu": 11.94
+          "bleu": 12.26
         },
         {
           "bucket": "11-15",
           "n": 1312,
-          "bleu": 5.85
+          "bleu": 5.79
         },
         {
           "bucket": "16-20",
@@ -92,44 +92,44 @@
         {
           "bucket": "21-25",
           "n": 1111,
-          "bleu": 3.22
+          "bleu": 3.26
         }
       ]
     },
     "attention": {
-      "repeated_words_pct": 8.34,
-      "too_short_missing_words_pct": 26.12,
-      "too_long_additional_words_pct": 6.38,
-      "mean_length_ratio_hyp_ref": 0.875,
+      "repeated_words_pct": 8.14,
+      "too_short_missing_words_pct": 22.56,
+      "too_long_additional_words_pct": 7.7,
+      "mean_length_ratio_hyp_ref": 0.906,
       "word_order_agreement": 0.95,
-      "word_order_errors_pct": 3.66,
-      "morphology_error_rate_pct": 5.62,
-      "named_entity_accuracy_pct": 88.23,
+      "word_order_errors_pct": 3.7,
+      "morphology_error_rate_pct": 5.56,
+      "named_entity_accuracy_pct": 90.81,
       "named_entity_cases": 1317,
-      "number_copy_accuracy_pct": 96.58,
+      "number_copy_accuracy_pct": 97.95,
       "rare_word_sentences": 488,
-      "bleu_rare_word_sentences": 4.19,
-      "bleu_common_word_sentences": 12.11,
+      "bleu_rare_word_sentences": 3.88,
+      "bleu_common_word_sentences": 12.21,
       "bleu_by_length": [
         {
           "bucket": "1-10",
           "n": 1164,
-          "bleu": 19.52
+          "bleu": 19.2
         },
         {
           "bucket": "11-15",
           "n": 1312,
-          "bleu": 11.76
+          "bleu": 11.79
         },
         {
           "bucket": "16-20",
           "n": 1413,
-          "bleu": 9.84
+          "bleu": 10.14
         },
         {
           "bucket": "21-25",
           "n": 1111,
-          "bleu": 9.55
+          "bleu": 9.58
         }
       ]
     }

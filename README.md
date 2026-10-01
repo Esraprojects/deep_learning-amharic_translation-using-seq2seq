@@ -17,28 +17,39 @@ with a **basic Seq2Seq + LSTM** baseline and an **attention-based Seq2Seq + LSTM
 
 | Metric | Seq2Seq + LSTM | **Attention Seq2Seq + LSTM** |
 |---|---:|---:|
-| BLEU ↑ | 5.21 | **11.27** |
-| chrF ↑ | 13.52 | **22.84** |
-| BLEU with greedy decoding | 4.77 | 10.23 |
-| Test loss (CE) ↓ | 3.701 | **3.202** |
+| BLEU ↑ | 5.26 | **11.35** |
+| chrF ↑ | 13.68 | **23.13** |
+| BLEU with greedy decoding | 4.91 | 10.36 |
+| Test loss (CE) ↓ | 3.691 | **3.187** |
 | Parameters | 7,995,200 | 8,191,808 |
 | Training time (4-core CPU) | 420 min | 420 min |
-| Inference per sentence (beam / greedy batched) | 64 / 4.0 ms | 81 / 4.7 ms |
+| Inference per sentence (beam / greedy batched) | 33 / 2.0 ms | 36 / 2.22 ms |
 
 **The attention model wins on every metric and in every sentence-length bucket.** Details:
 [comparison & error analysis](results/comparison.md) · [translation examples](results/examples.md) ·
 [error examples](results/error_analysis.md) · [full technical report](report/TECHNICAL_REPORT.md).
 
-| Attention: "I am going to the university." → ወደ ዩኒቨርሲቲው ሄድኩ። | BLEU by sentence length |
+| Attention: "The children are playing in the garden." → ልጆቹ በአትክልት ቦታው ውስጥ እየተጫወቱ ነው። | BLEU by sentence length |
 |---|---|
-| ![attention](results/figures/attention_1.png) | ![length](results/figures/bleu_by_length.png) |
+| ![attention](results/figures/attention_3.png) | ![length](results/figures/bleu_by_length.png) |
 
 **Improvements over version 1** (attention model): adding the habtew corpus for everyday language,
 training for 7 h instead of 2.5 h, and tuned beam search with repeat blocking raised BLEU from 8.57 to 11.27
 and chrF from 19.46 to 22.84, and cut repeated-word outputs from 24 % to 8 %.
 
-> The training data is still mostly religious text, so that domain translates best; household vocabulary
-> (e.g. "cooking dinner") is still often wrong.
+**Targeted fine-tuning (v3):** the error analysis found that many training pairs for everyday words are
+wrong; for example, half of the "playing" pairs lack the Amharic verb, and "garden" is usually ገነት
+("paradise"). `src/augment.py` writes 761 correct template pairs (`data/curated/play_garden.tsv`) for play,
+cook, eat, read, write, work, study, run, *garden* and negation, and `src/finetune.py` fine-tunes the models on
+them mixed with original data. Native speakers can edit or extend the TSV and re-run both scripts.
+
+```bash
+python src/augment.py && python src/finetune.py --model attention --upsample 10 --epochs 3
+python src/finetune.py --model seq2seq --upsample 2 --epochs 1
+```
+
+> The training data is still mostly religious text, so that domain translates best; everyday sentences
+> outside the curated patterns (e.g. "The weather is very cold today.") are still often wrong.
 
 ## Group members
 
@@ -96,7 +107,7 @@ python app.py                     # or: uvicorn app:app --host 0.0.0.0 --port 78
 curl -X POST http://localhost:7860/translate \
      -H "Content-Type: application/json" \
      -d '{"text": "I am going to the university."}'
-# {"translation": "ወደ ዩኒቨርሲቲው ሄድኩ።", "model": "attention"}
+# {"translation": "እኔ ወደ ዩኒቨርሲቲ ሄድኩ።", "model": "attention"}
 # optional fields: "model": "seq2seq", "decoding": "greedy" (default: attention + beam search)
 
 # choose the baseline instead:
