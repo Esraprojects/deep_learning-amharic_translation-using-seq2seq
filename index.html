@@ -1,0 +1,122 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>English → Amharic Translator</title>
+<meta name="description" content="Seq2Seq-LSTM vs Attention Seq2Seq-LSTM English to Amharic neural machine translation, running in your browser.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+Ethiopic:wght@400;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #f6f7f9; --surface: #ffffff; --text: #16181d; --muted: #5d6573; --border: #e2e5ea;
+    --accent: #1f6f5c; --accent-soft: #e3f1ec; --heat: 31,111,92; --shadow: 0 1px 2px rgba(16,24,40,.06), 0 4px 16px rgba(16,24,40,.05);
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --bg: #0f1114; --surface: #181b20; --text: #e8eaed; --muted: #9aa3ae; --border: #2a2f36;
+      --accent: #4cc2a2; --accent-soft: #173229; --heat: 76,194,162; --shadow: none;
+    }
+  }
+  :root[data-theme="dark"] {
+    --bg: #0f1114; --surface: #181b20; --text: #e8eaed; --muted: #9aa3ae; --border: #2a2f36;
+    --accent: #4cc2a2; --accent-soft: #173229; --heat: 76,194,162; --shadow: none;
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--text); font: 15px/1.55 Inter, system-ui, sans-serif; }
+  main { max-width: 960px; margin: 0 auto; padding: 32px 16px 64px; }
+  header h1 { font-size: 28px; margin: 0 0 6px; letter-spacing: -.01em; }
+  header p { margin: 0; color: var(--muted); }
+  .card { background: var(--surface); border: 1px solid var(--border); border-radius: 14px; padding: 20px; box-shadow: var(--shadow); margin-top: 20px; }
+  label { font-weight: 600; font-size: 13px; color: var(--muted); text-transform: uppercase; letter-spacing: .04em; }
+  textarea { width: 100%; margin-top: 8px; min-height: 84px; resize: vertical; padding: 12px 14px; font: inherit; font-size: 17px;
+             color: var(--text); background: var(--bg); border: 1px solid var(--border); border-radius: 10px; }
+  textarea:focus { outline: 2px solid var(--accent); outline-offset: 1px; }
+  .row { display: flex; gap: 12px; align-items: center; flex-wrap: wrap; margin-top: 12px; }
+  button#go { background: var(--accent); color: #fff; border: 0; border-radius: 10px; padding: 10px 22px; font: 600 15px Inter, sans-serif; cursor: pointer; }
+  button#go:disabled { opacity: .5; cursor: wait; }
+  #status { color: var(--muted); font-size: 13px; }
+  .examples { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 14px; }
+  .example { background: var(--accent-soft); color: var(--text); border: 1px solid var(--border); border-radius: 999px; padding: 5px 12px; font: 13px Inter, sans-serif; cursor: pointer; }
+  .outputs { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+  @media (max-width: 680px) { .outputs { grid-template-columns: 1fr; } }
+  .out { font-family: "Noto Sans Ethiopic", Inter, sans-serif; font-size: 22px; line-height: 1.5; margin-top: 8px; min-height: 34px; word-wrap: break-word; }
+  .badge { font-size: 11px; font-weight: 600; background: var(--accent); color: #fff; border-radius: 6px; padding: 2px 7px; margin-left: 6px; vertical-align: 1px; }
+  .ms { color: var(--muted); font-size: 12px; margin-top: 4px; }
+  .mono { font: 13px ui-monospace, SFMono-Regular, Menlo, monospace; color: var(--muted); word-break: break-word; }
+  .scroll { overflow-x: auto; margin-top: 12px; }
+  table { border-collapse: collapse; width: 100%; font-size: 14px; margin-top: 8px; }
+  th, td { text-align: left; padding: 8px 10px; border-bottom: 1px solid var(--border); }
+  td { text-align: right; font-variant-numeric: tabular-nums; }
+  thead th { color: var(--muted); font-weight: 600; font-size: 12px; text-transform: uppercase; }
+  thead th:not(:first-child) { text-align: right; }
+  footer { margin-top: 28px; color: var(--muted); font-size: 13px; }
+  a { color: var(--accent); }
+</style>
+</head>
+<body>
+<main>
+  <header>
+    <h1>English → Amharic Translator</h1>
+    <p>Basic Seq2Seq-LSTM vs Attention Seq2Seq-LSTM, trained on OPUS MT560. The models run fully in your browser.</p>
+  </header>
+
+  <section class="card">
+    <label for="input">English sentence</label>
+    <textarea id="input" maxlength="500">Jesus taught his disciples to love one another.</textarea>
+    <div class="row">
+      <button id="go" disabled>Translate</button>
+      <span id="status">Loading…</span>
+    </div>
+    <div class="examples">
+      <button class="example">God is love.</button>
+      <button class="example">The children are playing in the garden.</button>
+      <button class="example">I am going to the university.</button>
+      <button class="example">We must read the Bible every day.</button>
+      <button class="example">Where is my brother?</button>
+      <button class="example">My mother is cooking dinner for the family.</button>
+    </div>
+  </section>
+
+  <section class="card outputs">
+    <div>
+      <label>Attention Seq2Seq + LSTM</label><span class="badge">best</span>
+      <div class="out" id="out-attention" lang="am">—</div>
+      <div class="ms" id="ms-attention"></div>
+    </div>
+    <div>
+      <label>Basic Seq2Seq + LSTM</label>
+      <div class="out" id="out-seq2seq" lang="am">—</div>
+      <div class="ms" id="ms-seq2seq"></div>
+    </div>
+  </section>
+
+  <section class="card" id="attn-wrap" hidden>
+    <label>Pipeline</label>
+    <p class="mono">normalized: <span id="normalized"></span><br>subwords: <span id="src-tokens"></span></p>
+    <label>Attention weights</label>
+    <p style="margin:4px 0 0;color:var(--muted);font-size:13px">Each row is one generated Amharic subword; darker cells are the English subwords the model attended to.</p>
+    <div class="scroll"><canvas id="heatmap"></canvas></div>
+  </section>
+
+  <section class="card" id="metrics-wrap" hidden>
+    <label>Test-set results (5,000 sentences)</label>
+    <div class="scroll">
+      <table>
+        <thead><tr><th>Metric</th><th>Seq2Seq</th><th>Attention</th></tr></thead>
+        <tbody id="metrics"></tbody>
+      </table>
+    </div>
+  </section>
+
+  <footer>
+    Training data: <a href="https://huggingface.co/datasets/michsethowusu/english-amharic_sentence-pairs_mt560">OPUS MT560 English–Amharic</a> (CC-BY-4.0).
+    The corpus is dominated by religious texts, so that domain translates best.
+    <a href="https://github.com/Esraprojects/deep_learning-amharic_translation-using-seq2seq">Source code, report &amp; REST API</a>.<br>
+    Deep Learning course project by Bethel Negusu, Esrom Adugna, Selamawit Siferh and Aklilu Solomon.
+  </footer>
+</main>
+<script type="module" src="app.js"></script>
+</body>
+</html>
