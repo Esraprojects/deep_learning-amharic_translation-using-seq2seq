@@ -25,26 +25,33 @@ function showProgress(label) {
 }
 
 // Download a model file with progress reporting; retried once on network errors.
+// The server may gzip the response, so Content-Length (compressed size) is not the
+// number of bytes we receive: collect chunks and use the true size from vocab.json.
 async function fetchBytes(url, label, attempt = 1) {
   try {
     const res = await fetch(url);
     if (!res.ok) throw new Error(`${url}: HTTP ${res.status}`);
-    const total = Number(res.headers.get("content-length")) || 0;
+    const name = url.split("/").pop();
+    const total = (vocab.files && vocab.files[name]) || Number(res.headers.get("content-length")) || 0;
     if (!res.body || !total) return new Uint8Array(await res.arrayBuffer());
     const reader = res.body.getReader();
-    const buf = new Uint8Array(total);
-    let off = 0;
-    progress[url] = [0, total, label];
+    const chunks = [];
+    let got = 0;
     for (;;) {
       const { done, value } = await reader.read();
       if (done) break;
-      buf.set(value, off);
-      off += value.length;
-      progress[url] = [off, total, label];
+      chunks.push(value);
+      got += value.length;
+      progress[url] = [Math.min(got, total), total, label];
       showProgress(label);
     }
-    return off === total ? buf : buf.slice(0, off);
+    const buf = new Uint8Array(got);
+    let off = 0;
+    for (const c of chunks) { buf.set(c, off); off += c.length; }
+    progress[url] = [total, total, label];
+    return buf;
   } catch (e) {
+    delete progress[url];
     if (attempt < 2) return fetchBytes(url, label, attempt + 1);
     throw e;
   }

@@ -106,6 +106,9 @@ def main():
         for part in ("encoder", "decoder"):
             p = os.path.join(WEB, f"{kind}_{part}.onnx")
             print(p, round(os.path.getsize(p) / 2**20, 1), "MB")
+    # true (uncompressed) sizes: GitHub Pages gzips responses, so the browser cannot rely
+    # on Content-Length for download progress
+    meta["files"] = {f: os.path.getsize(os.path.join(WEB, f)) for f in sorted(os.listdir(WEB)) if f.endswith(".onnx")}
     with open(os.path.join(WEB, "vocab.json"), "w", encoding="utf-8") as f:
         json.dump({"en": export_vocab("en"), "am": export_vocab("am"), **meta}, f, ensure_ascii=False)
 
